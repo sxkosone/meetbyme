@@ -38,9 +38,6 @@ class MapDoc extends React.Component {
         })
     }
 
-
-  
-
     render() {
         return( 
         <div>
