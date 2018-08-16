@@ -1,31 +1,25 @@
 import React from 'react';
 import ReactMapboxGl, { Layer, Feature, Popup} from "react-mapbox-gl";
 
-const mapBoxToken= "pk.eyJ1Ijoid2xleTMzMzciLCJhIjoiY2prd2p2amxnMGlndDN3bzVieWE0N2dsbyJ9.aSerRKvNmEuVsN5R4k174Q"
-const style = "mapbox://styles/wley3337/cjkwtf1sp1a8b2ro0ojr9f8oe"
+
 
 const Map = ReactMapboxGl({
     accessToken: mapBoxToken
   });
 class MapDoc extends React.Component {
 
+    state ={
+        focus: null
+    }
+
     handleOnClick= () =>{
         console.log("clicked")
     }
 
-    handleOnHover = (eventObj) => {
-        console.log(eventObj);
-       
-        // <Popup
-        //     coordinates={[eventObj.venue.lon, eventObj.venue.lat]}
-        //     offset={{
-        //         'bottom-left': [12, -38],  'bottom': [0, -38], 'bottom-right': [-12, -38]
-        //     }}
-        //     key={eventObj.id}
-        //     >
-        //     <h1>{eventObj.name}</h1>
-        // </Popup>
+    handleHover = (eventObj) => {
+       this.state.focus ? this.setState({focus: null}) : this.setState({focus: eventObj})
     }
+
 
 
     createEventMarkers= () =>{
@@ -36,13 +30,17 @@ class MapDoc extends React.Component {
                     properties={eventObj} 
                     coordinates={[eventObj.venue.lon, eventObj.venue.lat]} 
                     onClick={() => this.handleOnClick(eventObj)}
-                    onMouseEnter={() => this.handleOnHover(eventObj)}
+                    onMouseEnter={() => this.handleHover(eventObj)}
+                    onMouseLeave={() => this.handleHover(eventObj)}
                     key={`marker-${eventObj.id}`}
                 />                
             )
         })
     }
-   
+
+
+  
+
     render() {
         return( 
         <div>
@@ -53,7 +51,7 @@ class MapDoc extends React.Component {
                     //this is the size properties for map object
                 containerStyle={{ 
                     height: "50vh", 
-                    width: "50vw"
+                    width: "100vw"
                 }}
                 center={[this.props.long, this.props.lat]}
                 zoom ={[14]} //starting zoom level 0=far away, 20= very close
@@ -72,6 +70,22 @@ class MapDoc extends React.Component {
                     layout={{ "icon-image": "marker-15" }}>
                     {this.createEventMarkers()}
                 </Layer>
+              
+                {this.state.focus ? 
+                    <Popup
+                        coordinates={[this.state.focus.venue.lon, this.state.focus.venue.lat]}
+                        offset={{
+                            'bottom-left': [12, -38],  'bottom': [0, -38], 'bottom-right': [-12, -38]
+                        }}
+                        key={this.state.focus.id}
+                        className="popup">
+                        <h3>{this.state.focus.name}</h3>
+                    </Popup>
+                    :
+                    null
+            
+                }
+                
             </Map>
             :
             null
