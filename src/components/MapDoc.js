@@ -70,7 +70,7 @@ class MapDoc extends React.Component {
                     layout={{ "icon-image": "marker-15" }}>
                     {this.createEventMarkers()}
                 </Layer>
-              
+              {/* adds popup when hovering over event */}
                 {this.state.focus ? 
                     <Popup
                         coordinates={[this.state.focus.venue.lon, this.state.focus.venue.lat]}
