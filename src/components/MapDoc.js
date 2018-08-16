@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactMapboxGl, { Layer, Feature } from "react-mapbox-gl";
+import ReactMapboxGl, { Layer, Feature, Popup } from "react-mapbox-gl";
 
 
 
@@ -11,17 +11,47 @@ class MapDoc extends React.Component {
     handleOnClick= () =>{
         console.log("clicked")
     }
+
+    // handleOnHover = (eventObj) => {
+    //     console.log(eventObj);
+       
+    //     <Popup
+    //         coordinates={[eventObj.venue.lon, eventObj.venue.lat]}
+    //         offset={{
+    //             'bottom-left': [12, -38],  'bottom': [0, -38], 'bottom-right': [-12, -38]
+    //         }}
+    //         key={eventObj.id}
+    //         >
+    //         <h1>{eventObj.name}</h1>
+    //     </Popup>
+    // }
+
+
     createEventMarkers= () =>{
       
         return this.props.events.results.map(eventObj => {
             return(
-                <Feature  
-                    properties={eventObj} 
-                    coordinates={[eventObj.venue.lon, eventObj.venue.lat]} 
-                    onClick={() => this.handleOnClick(eventObj)}
-                    onMouseEnter={(e) =>{console.log(e.feature.properties)}}
-                    key={eventObj.id}
-                />
+                  
+                        <React.Fragment>
+                            <Feature  
+                                properties={eventObj} 
+                                coordinates={[eventObj.venue.lon, eventObj.venue.lat]} 
+                                onClick={() => this.handleOnClick(eventObj)}
+                                // onMouseEnter={() => this.handleOnHover(eventObj)}
+                                key={`marker-${eventObj.id}`}
+                            />
+                            {/* <Popup
+                                coordinates={[eventObj.venue.lon, eventObj.venue.lat]}
+                                offset={{
+                                    'bottom-left': [12, -38],  'bottom': [0, -38], 'bottom-right': [-12, -38]
+                                }}
+                                key={`popup-${eventObj.id}`}
+                                >
+                                <h1>{eventObj.name}</h1>
+                            </Popup> */}
+                        </React.Fragment>
+
+                        
             )
         })
     }
