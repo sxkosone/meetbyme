@@ -7,6 +7,7 @@ const Map = ReactMapboxGl({
     accessToken: mapBoxToken
   });
 class MapDoc extends React.Component {
+
     handleOnClick= () =>{
         console.log("clicked")
     }
