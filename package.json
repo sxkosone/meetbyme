@@ -3,8 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "install": "^0.12.1",
+    "mapbox-gl": "^0.47.0",
+    "rea": "0.0.1",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
+    "react-mapbox-gl": "^3.8.0",
     "react-scripts": "1.1.4"
   },
   "scripts": {

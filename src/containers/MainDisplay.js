@@ -2,7 +2,7 @@ import React from 'react';
 import MapContainer from './MapContainer';
 import Search from '../components/Search';
 
-const BASE_URL="http://localhost:3001/users/search?"
+const BASE_URL="http://localhost:3000/users/search?"
 
 class MainDisplay extends React.Component {
     constructor() {
@@ -41,7 +41,7 @@ class MainDisplay extends React.Component {
         return (
         <div>
             <Search />
-            <MapContainer />
+            <MapContainer long={this.state.long} lat={this.state.lat} events={this.state.events}/>
         </div>
     )
     }
