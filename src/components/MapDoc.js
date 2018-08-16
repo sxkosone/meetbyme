@@ -1,16 +1,16 @@
 import React from 'react';
 import ReactMapboxGl, { Layer, Feature, Popup} from "react-mapbox-gl";
 
-const mapBoxToken= "pk.eyJ1Ijoid2xleTMzMzciLCJhIjoiY2prd2p2amxnMGlndDN3bzVieWE0N2dsbyJ9.aSerRKvNmEuVsN5R4k174Q"
 const style = "mapbox://styles/wley3337/cjkwtf1sp1a8b2ro0ojr9f8oe"
+const mapBoxToken=process.env.REACT_APP_MAPBOX_API
 
 const Map = ReactMapboxGl({
     accessToken: mapBoxToken
   });
 class MapDoc extends React.Component {
 
-    handleOnClick= () =>{
-        console.log("clicked")
+    handleOnClick = (eventObj) => {
+        this.props.selectEventForDisplay(eventObj)
     }
 
     handleOnHover = (eventObj) => {
@@ -53,7 +53,7 @@ class MapDoc extends React.Component {
                     //this is the size properties for map object
                 containerStyle={{ 
                     height: "50vh", 
-                    width: "50vw"
+                    width: "100vw"
                 }}
                 center={[this.props.long, this.props.lat]}
                 zoom ={[14]} //starting zoom level 0=far away, 20= very close
