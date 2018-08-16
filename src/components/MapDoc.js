@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactMapboxGl, { Layer, Feature, Popup} from "react-mapbox-gl";
 
-
+const style = "mapbox://styles/wley3337/cjkwtf1sp1a8b2ro0ojr9f8oe"
+const mapBoxToken=process.env.REACT_APP_MAPBOX_API
 
 const Map = ReactMapboxGl({
     accessToken: mapBoxToken

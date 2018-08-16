@@ -1,5 +1,10 @@
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
+1. `git clone` this repo and `npm install`.
+2. Get your Mapbox API key by signing up to Mapbox
+3. Create a `.env` file outside our `src` folder and add the following line: `REACT_APP_MAPBOX_API="your-key-here"`
+4. You can reference the key in your code with `process.env.REACT_APP_MAPBOX_API`
+
 Below you will find some information on how to perform common tasks.<br>
 You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
 

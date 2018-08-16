@@ -1,8 +1,9 @@
 import React from 'react';
 import MapDoc from '../components/MapDoc';
 import Search from '../components/Search';
+import EventDisplay from '../components/EventDisplay'
 
-const BASE_URL="http://localhost:3000/users/search?"
+const BASE_URL="http://localhost:3001/users/search?"
 
 class MainDisplay extends React.Component {
     constructor() {
@@ -10,7 +11,8 @@ class MainDisplay extends React.Component {
         this.state = {
             events: [],
             long: null,
-            lat: null
+            lat: null,
+            selectedEvent: null
         }
     }
 
@@ -35,13 +37,24 @@ class MainDisplay extends React.Component {
                 })
             })
         })
-      }
+    }
+
+    selectEventForDisplay = (eventObj) => {
+        this.setState({
+            selectedEvent: eventObj
+        })
+    }
 
     render() {
         return (
         <div>
             <Search />
-            <MapDoc long={this.state.long} lat={this.state.lat} events={this.state.events}/>
+            {this.state.selectedEvent ? <EventDisplay event={this.state.selectedEvent}/> : null}
+            <MapDoc 
+            long={this.state.long} 
+            lat={this.state.lat} 
+            events={this.state.events} 
+            selectEventForDisplay={this.selectEventForDisplay}/>
         </div>
     )
     }
