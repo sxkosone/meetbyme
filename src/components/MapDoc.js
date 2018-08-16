@@ -9,23 +9,18 @@ const Map = ReactMapboxGl({
   });
 class MapDoc extends React.Component {
 
-    handleOnClick = (eventObj) => {
-        this.props.selectEventForDisplay(eventObj)
+    state ={
+        focus: null
     }
 
-    handleOnHover = (eventObj) => {
-        console.log(eventObj);
-       
-        // <Popup
-        //     coordinates={[eventObj.venue.lon, eventObj.venue.lat]}
-        //     offset={{
-        //         'bottom-left': [12, -38],  'bottom': [0, -38], 'bottom-right': [-12, -38]
-        //     }}
-        //     key={eventObj.id}
-        //     >
-        //     <h1>{eventObj.name}</h1>
-        // </Popup>
+    handleOnClick= () =>{
+        console.log("clicked")
     }
+
+    handleHover = (eventObj) => {
+       this.state.focus ? this.setState({focus: null}) : this.setState({focus: eventObj})
+    }
+
 
 
     createEventMarkers= () =>{
@@ -36,13 +31,17 @@ class MapDoc extends React.Component {
                     properties={eventObj} 
                     coordinates={[eventObj.venue.lon, eventObj.venue.lat]} 
                     onClick={() => this.handleOnClick(eventObj)}
-                    onMouseEnter={() => this.handleOnHover(eventObj)}
+                    onMouseEnter={() => this.handleHover(eventObj)}
+                    onMouseLeave={() => this.handleHover(eventObj)}
                     key={`marker-${eventObj.id}`}
                 />                
             )
         })
     }
-   
+
+
+  
+
     render() {
         return( 
         <div>
@@ -72,6 +71,22 @@ class MapDoc extends React.Component {
                     layout={{ "icon-image": "marker-15" }}>
                     {this.createEventMarkers()}
                 </Layer>
+              {/* adds popup when hovering over event */}
+                {this.state.focus ? 
+                    <Popup
+                        coordinates={[this.state.focus.venue.lon, this.state.focus.venue.lat]}
+                        offset={{
+                            'bottom-left': [12, -38],  'bottom': [0, -38], 'bottom-right': [-12, -38]
+                        }}
+                        key={this.state.focus.id}
+                        className="popup">
+                        <h3>{this.state.focus.name}</h3>
+                    </Popup>
+                    :
+                    null
+            
+                }
+                
             </Map>
             :
             null
