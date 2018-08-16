@@ -13,8 +13,9 @@ class MapDoc extends React.Component {
         focus: null
     }
 
-    handleOnClick= () =>{
+    handleOnClick= (eventObj) =>{
         console.log("clicked")
+        this.props.selectEventForDisplay(eventObj)
     }
 
     handleHover = (eventObj) => {
