@@ -13,15 +13,11 @@ class MapDoc extends React.Component {
         focus: null
     }
 
-    handleOnClick= () =>{
-        console.log("clicked")
-    }
+   
 
     handleHover = (eventObj) => {
        this.state.focus ? this.setState({focus: null}) : this.setState({focus: eventObj})
     }
-
-
 
     createEventMarkers= () =>{
         return this.props.events.results.map(eventObj => { 
@@ -30,7 +26,7 @@ class MapDoc extends React.Component {
                 <Feature  
                     properties={eventObj} 
                     coordinates={[eventObj.venue.lon, eventObj.venue.lat]} 
-                    onClick={() => this.handleOnClick(eventObj)}
+                    onClick={(e) => this.props.selectEventForDisplay(e, eventObj)}
                     onMouseEnter={() => this.handleHover(eventObj)}
                     onMouseLeave={() => this.handleHover(eventObj)}
                     key={`marker-${eventObj.id}`}
@@ -48,11 +44,11 @@ class MapDoc extends React.Component {
                 style={`${style}`}
                     //this is the size properties for map object
                 containerStyle={{ 
-                    height: "50vh", 
+                    height: "100vw", 
                     width: "100vw"
                 }}
                 center={[this.props.long, this.props.lat]}
-                zoom ={[14]} //starting zoom level 0=far away, 20= very close
+                zoom ={[12]} //starting zoom level 0=far away, 20= very close
              >
              
                 <Layer

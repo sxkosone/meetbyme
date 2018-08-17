@@ -2,6 +2,9 @@ import React from 'react';
 import MapDoc from '../components/MapDoc';
 import Search from '../components/Search';
 import EventDisplay from '../components/EventDisplay'
+import '../index.css'
+import { Dimmer, Loader } from 'semantic-ui-react'
+
 
 const BASE_URL="http://localhost:3001/users/search?"
 
@@ -12,7 +15,8 @@ class MainDisplay extends React.Component {
             events: [],
             long: null,
             lat: null,
-            selectedEvent: null
+            selectedEvent: null,
+            loading: true
         }
     }
 
@@ -33,28 +37,50 @@ class MainDisplay extends React.Component {
                 this.setState({
                 events: response,
                 long: pos.coords.longitude,
-                lat: pos.coords.latitude
+                lat: pos.coords.latitude,
+                loading: false
                 })
             })
         })
     }
 
-    selectEventForDisplay = (eventObj) => {
+    selectEventForDisplay = (e, eventObj) => {
+        console.log("clicked", e)
         this.setState({
             selectedEvent: eventObj
         })
+    }
+
+    closeDisplay = () => {
+        this.setState({
+            selectedEvent: null
+        })
+    }
+
+    showLoadingAnimation() {
+        if (this.state.loading) {
+            return (
+                <Dimmer active>
+                    <Loader />
+                </Dimmer>
+            )
+        }
     }
 
     render() {
         return (
         <div>
             <Search />
-            {this.state.selectedEvent ? <EventDisplay event={this.state.selectedEvent}/> : null}
-            <MapDoc 
-            long={this.state.long} 
-            lat={this.state.lat} 
-            events={this.state.events} 
-            selectEventForDisplay={this.selectEventForDisplay}/>
+            <div className="dataDisplayContainer">
+                {this.showLoadingAnimation()}
+                {this.state.selectedEvent ? <EventDisplay event={this.state.selectedEvent} closeDisplay={this.closeDisplay}/> : null}
+                <MapDoc 
+                long={this.state.long} 
+                lat={this.state.lat} 
+                events={this.state.events} 
+                selectEventForDisplay={this.selectEventForDisplay}/>
+
+            </div>
         </div>
     )
     }
