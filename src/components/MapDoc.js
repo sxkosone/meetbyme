@@ -53,13 +53,8 @@ class MapDoc extends React.PureComponent {
                     height: "100vw", 
                     width: "100vw"
                 }}
-<<<<<<< HEAD
-                center={[this.props.long, this.props.lat]}
-                zoom ={[15]} //starting zoom level 0=far away, 20= very close
-=======
                 center={this.CENTER}
                 zoom = {this.ZOOM}
->>>>>>> searches-and-filters
              >
              
                 <Layer
