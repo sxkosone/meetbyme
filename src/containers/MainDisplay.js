@@ -6,7 +6,7 @@ import '../index.css'
 import { Dimmer, Loader } from 'semantic-ui-react'
 
 
-const BASE_URL="http://localhost:3001/search?"
+const BASE_URL="http://localhost:3001/search"
 
 class MainDisplay extends React.Component {
     constructor() {
@@ -19,17 +19,31 @@ class MainDisplay extends React.Component {
             popupEvent: null,
             loading: true
         }
+        this.categories = []
     }
 
     componentDidMount() {
         console.log("maindisplay mounted")
         this.getUserLocationAndFetchEvents()
+        this.fetchAllCategories()
     }
 
     fetchInitialEvents = (lat, long) => {
         //returns a promise that holds the results of our API call to MEETUP
-        return fetch(`${BASE_URL}lat=${lat}&long=${long}`).then(r => r.json())
+        return fetch(`${BASE_URL}?lat=${lat}&long=${long}`).then(r => r.json())
         
+    }
+
+    fetchAllCategories = () => {
+        fetch(BASE_URL+"/categories")
+        .then(r => r.json())
+        .then(data => this.categories=data.results)
+    }
+
+    fetchEventsByCategory = (categoryId) => {
+        //should I change state back to loading: true
+        fetch(`${BASE_URL}?lat=${this.state.lat}&long=${this.state.long}&category=${categoryId}`).then(r => r.json())
+        .then(console.log)
     }
 
     getUserLocationAndFetchEvents = () => {
@@ -91,7 +105,7 @@ class MainDisplay extends React.Component {
     render() {
         return (
         <div>
-            <Search />
+            <Search categories={this.categories} searchByCategory={this.fetchEventsByCategory}/>
             <div className="dataDisplayContainer">
                 {this.showLoadingAnimation()}
                 {this.state.selectedEvent ? <EventDisplay event={this.state.selectedEvent} closeDisplay={this.closeDisplay}/> : null}
