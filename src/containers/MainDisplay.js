@@ -4,6 +4,8 @@ import Search from '../components/Search';
 import EventDisplay from '../components/EventDisplay'
 import '../index.css'
 import { Dimmer, Loader } from 'semantic-ui-react'
+import Navbar from './Navbar'
+import UserShow from './UserShow'
 
 
 const BASE_URL="http://localhost:3001/search"
@@ -11,13 +13,16 @@ const BASE_URL="http://localhost:3001/search"
 class MainDisplay extends React.Component {
     constructor() {
         super()
+       
         this.state = {
             events: [],
             long: null,
             lat: null,
             selectedEvent: null,
             popupEvent: null,
-            loading: true
+            loading: true,
+            userId: null
+           
         }
         this.categories = []
     }
@@ -26,7 +31,13 @@ class MainDisplay extends React.Component {
         console.log("maindisplay mounted")
         this.getUserLocationAndFetchEvents()
         this.fetchAllCategories()
+        
     }
+
+    setUserId= (userId) =>{
+        this.setState({userId: userId})
+    }
+
 
     fetchInitialEvents = (lat, long) => {
         //returns a promise that holds the results of our API call to MEETUP
@@ -101,16 +112,75 @@ class MainDisplay extends React.Component {
         popUpEvent={this.state.popupEvent}
         togglePopUpFocus={this.focusOnEvent}/> : null
     }
+    convertTime(time) {
+        let d = new Date(time)
+        return d.toString()
+    }
+
+    parseEventForSave(eventObj){
+        const description= !eventObj.description ? null : eventObj.description;
+        const venue_name= !eventObj.venue.name ? null : eventObj.venue.name;
+        const long= !eventObj.venue.lon ? null : eventObj.venue.lon;
+        const lat= !eventObj.venue.lat ? null : eventObj.venue.lat;
+        const address= !eventObj.venue.address_1 ? null : eventObj.venue.address_1;
+        const city= !eventObj.venue.city ? null : eventObj.venue.city;
+        const country= !eventObj.venue.localized_country_name ? null :eventObj.venue.localized_country_name;
+        const event_url= !eventObj.event_url ? null : eventObj.event_url;
+        const name= !eventObj.name ? null : eventObj.name;
+        const duration= !eventObj.duration ? null : eventObj.duration;
+        const time= !eventObj.time ? null : this.convertTime(eventObj.time);
+        const group_name= !eventObj.group.name ? null : eventObj.group.name;
+        const group_who= !eventObj.group.who ? null : eventObj.group.who;
+        const meetup_id= !eventObj.id ? null : eventObj.id;
+        const photo_url= !eventObj.photo_url ? null : eventObj.photo_url;
+        return { description: description, venue_name: venue_name, long: long, lat: lat, 
+        address: address, city: city, country: country, event_url: event_url, name: name,
+        duration: duration, time: time, group_name: group_name, group_who: group_who,
+        meetup_id: meetup_id, photo_url: photo_url}
+    }   
+
+
+
+
+    saveEventToUser= (userId, event) => {
+        console.log("event", event, "userid", userId,localStorage.getItem('token') )
+        const data ={ user: { userId: userId, event: this.parseEventForSave(event)} }
+        
+        fetch(`http://localhost:3001/users/${userId}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Token ${localStorage.getItem("token")}`
+          },
+        body: JSON.stringify(data)
+    })
+    .then(r => r.json())
+    .then(console.log)
+
+    }
 
     render() {
         return (
         <div>
+            <Navbar setUserId={this.setUserId}/>
             <Search categories={this.categories} searchByCategory={this.fetchEventsByCategory}/>
+            
             <div className="dataDisplayContainer">
                 {this.showLoadingAnimation()}
-                {this.state.selectedEvent ? <EventDisplay event={this.state.selectedEvent} closeDisplay={this.closeDisplay}/> : null}
+                {this.state.selectedEvent ? 
+                    <EventDisplay 
+                        event={this.state.selectedEvent} 
+                        closeDisplay={this.closeDisplay}
+                        userId= {this.state.userId ? this.state.userId : null}
+                        saveEventToUser= {this.state.userId ? this.saveEventToUser : null}
+                    /> 
+                      : 
+                    null}
                 {this.renderMapIfReady()}
             </div>
+
+            {this.state.userId ? <UserShow userId ={this.userId}/> : null}
         </div>
     )
     }
