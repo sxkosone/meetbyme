@@ -6,7 +6,7 @@ import '../index.css'
 import { Dimmer, Loader } from 'semantic-ui-react'
 
 
-const BASE_URL="http://localhost:3001/users/search?"
+const BASE_URL="http://localhost:3001/search?"
 
 class MainDisplay extends React.Component {
     constructor() {
@@ -16,6 +16,7 @@ class MainDisplay extends React.Component {
             long: null,
             lat: null,
             selectedEvent: null,
+            popupEvent: null,
             loading: true
         }
     }
@@ -57,6 +58,16 @@ class MainDisplay extends React.Component {
         })
     }
 
+    focusOnEvent = (eventObj) => {
+        console.log("focusing on", eventObj)
+        let newVal = this.state.popupEvent ? null : eventObj
+        this.setState({
+            popupEvent: newVal
+        })
+    }
+
+    
+
     showLoadingAnimation() {
         if (this.state.loading) {
             return (
@@ -67,6 +78,16 @@ class MainDisplay extends React.Component {
         }
     }
 
+    renderMapIfReady() {
+        return !this.state.loading ? <MapDoc 
+        long={this.state.long} 
+        lat={this.state.lat} 
+        events={this.state.events} 
+        selectEventForDisplay={this.selectEventForDisplay}
+        popUpEvent={this.state.popupEvent}
+        togglePopUpFocus={this.focusOnEvent}/> : null
+    }
+
     render() {
         return (
         <div>
@@ -74,12 +95,7 @@ class MainDisplay extends React.Component {
             <div className="dataDisplayContainer">
                 {this.showLoadingAnimation()}
                 {this.state.selectedEvent ? <EventDisplay event={this.state.selectedEvent} closeDisplay={this.closeDisplay}/> : null}
-                <MapDoc 
-                long={this.state.long} 
-                lat={this.state.lat} 
-                events={this.state.events} 
-                selectEventForDisplay={this.selectEventForDisplay}/>
-
+                {this.renderMapIfReady()}
             </div>
         </div>
     )
