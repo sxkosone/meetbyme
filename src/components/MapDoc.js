@@ -7,12 +7,18 @@ const mapBoxToken=process.env.REACT_APP_MAPBOX_API
 const Map = ReactMapboxGl({
     accessToken: mapBoxToken
   });
-class MapDoc extends React.Component {
 
-    state ={
-        focus: null
+class MapDoc extends React.PureComponent {
+
+    constructor(props) {
+        //set initial map center just once!
+        super(props)
+        this.state = {
+            focus: null
+        }
+        this.CENTER = [this.props.long, this.props.lat]
+        this.ZOOM = [16]  //starting zoom level 0=far away, 20= very close
     }
-
    
 
     handleHover = (eventObj) => {
@@ -47,8 +53,13 @@ class MapDoc extends React.Component {
                     height: "100vw", 
                     width: "100vw"
                 }}
+<<<<<<< HEAD
                 center={[this.props.long, this.props.lat]}
                 zoom ={[15]} //starting zoom level 0=far away, 20= very close
+=======
+                center={this.CENTER}
+                zoom = {this.ZOOM}
+>>>>>>> searches-and-filters
              >
              
                 <Layer
