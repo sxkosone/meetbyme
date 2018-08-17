@@ -6,7 +6,7 @@ import '../index.css'
 import { Dimmer, Loader } from 'semantic-ui-react'
 
 
-const BASE_URL="http://localhost:3001/users/search?"
+const BASE_URL="http://localhost:3001/search?"
 
 class MainDisplay extends React.Component {
     constructor() {
