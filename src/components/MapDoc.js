@@ -48,7 +48,7 @@ class MapDoc extends React.Component {
                     width: "100vw"
                 }}
                 center={[this.props.long, this.props.lat]}
-                zoom ={[12]} //starting zoom level 0=far away, 20= very close
+                zoom ={[15]} //starting zoom level 0=far away, 20= very close
              >
              
                 <Layer
