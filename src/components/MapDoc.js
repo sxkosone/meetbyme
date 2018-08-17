@@ -50,7 +50,7 @@ class MapDoc extends React.PureComponent {
                 style={`${style}`}
                     //this is the size properties for map object
                 containerStyle={{ 
-                    height: "100vw", 
+                    height: "50vh", 
                     width: "100vw"
                 }}
                 center={this.CENTER}
