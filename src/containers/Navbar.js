@@ -13,17 +13,26 @@ export default class Navbar extends Component {
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
 
-  userLogIn = ()=>{
+  handleLogin= () => {
+    const username = this.state.username;
+    const password = this.state.password;
+    this.userLogIn( username, password)
+    this.setState(
+      {username: '', password: ''})
+  }
+
+
+  userLogIn = (username, password)=>{
     return fetch(`http://localhost:3001/users/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json; charset=utf-8",
             Accept: "application/json"
         },
-        body: JSON.stringify({username: this.state.username, password: this.state.password})
+        body: JSON.stringify({username: username, password: password})
     })
     .then(r  => r.json())
-    .then(json => json["success"] ? (localStorage.setItem("token", `${json['token']}`), this.props.setUserId(json['user_id'])) : alert("Wrong username or password"))
+    .then(json => json["success"] ? (localStorage.setItem("token", `${json['token']}`), this.props.setUserId(json['user_id']), this.props.fetchCurrentUser(json['user_id'])) : alert("Wrong username or password"))
 }
 
   render() {
@@ -48,19 +57,19 @@ export default class Navbar extends Component {
                 <Form>
                     <Form.Field inline>
                     <label>UserName</label>
-                    <Input placeholder='username' onChange={(e) => this.setState({ username: e.target.value})}/>
+                    <Input placeholder='username' value={this.state.username} onChange={(e) => this.setState({ username: e.target.value})}/>
                     </Form.Field>
                     <Form.Field inline>
                     <label>Password</label>
-                    <Input type="password" placeholder='password' onChange={(e) => this.setState({ password: e.target.value})}/>
+                    <Input type="password" placeholder='password' value={this.state.password} onChange={(e) => this.setState({ password: e.target.value})}/>
                     </Form.Field>
-                    <Button onClick={this.userLogIn}>LogIn</Button>
+                    <Button onClick={this.handleLogin}>LogIn</Button>
                 </Form>
             
             <Menu.Item
               name='logout'
               active={activeItem === 'logout'}
-              onClick={this.handleItemClick}
+              onClick={this.props.logOut}
             />
           </Menu.Menu>
         </Menu>

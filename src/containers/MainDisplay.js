@@ -9,6 +9,7 @@ import UserShow from './UserShow'
 
 
 const BASE_URL="http://localhost:3001/search"
+const BASE_USER_URL="http://localhost:3001/users/"
 
 class MainDisplay extends React.Component {
     constructor() {
@@ -21,8 +22,9 @@ class MainDisplay extends React.Component {
             selectedEvent: null,
             popupEvent: null,
             loading: true,
-            userId: null
-           
+            userId: null,
+            currentUser: null
+            
         }
         this.categories = []
     }
@@ -36,6 +38,14 @@ class MainDisplay extends React.Component {
 
     setUserId= (userId) =>{
         this.setState({userId: userId})
+    }
+
+    handleLogOut = () =>{
+        localStorage.clear()
+        this.setState({
+            userId: null,
+            currentUser: null
+        })
     }
 
 
@@ -70,6 +80,7 @@ class MainDisplay extends React.Component {
         })
     }
 
+
     selectEventForDisplay = (e, eventObj) => {
         console.log("clicked", e)
         this.setState({
@@ -90,7 +101,24 @@ class MainDisplay extends React.Component {
             popupEvent: newVal
         })
     }
+    fetchCurrentUserObj = (userId) =>{
+        console.log(userId);
+        fetch(BASE_USER_URL + userId, {
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                Authorization: `Token ${localStorage.getItem("token")}`
+              }
+        })
+        .then(r => r.json())
+        .then(userObj => this.setCurrentUser(userObj))
+    }
 
+    setCurrentUser= (userObj) =>{
+        this.setState({
+            currentUser: userObj
+        })
+    }
     
 
     showLoadingAnimation() {
@@ -156,14 +184,14 @@ class MainDisplay extends React.Component {
         body: JSON.stringify(data)
     })
     .then(r => r.json())
-    .then(console.log)
+    .then(userObj => this.setCurrentUser(userObj)) //this updates the user object to update showpage elements
 
     }
 
     render() {
         return (
         <div>
-            <Navbar setUserId={this.setUserId}/>
+            <Navbar setUserId={this.setUserId} logOut={this.handleLogOut} fetchCurrentUser={this.fetchCurrentUserObj}/>
             <Search categories={this.categories} searchByCategory={this.fetchEventsByCategory}/>
             
             <div className="dataDisplayContainer">
@@ -180,7 +208,7 @@ class MainDisplay extends React.Component {
                 {this.renderMapIfReady()}
             </div>
 
-            {this.state.userId ? <UserShow userId ={this.userId}/> : null}
+            {this.state.currentUser ? <UserShow currentUser ={this.state.currentUser} /> : null}
         </div>
     )
     }
