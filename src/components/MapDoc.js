@@ -30,10 +30,7 @@ class MapDoc extends React.PureComponent {
     createEventMarkers= () =>{
         return this.props.events.map(eventObj => { 
             let coordinates = eventObj.venue ? [eventObj.venue.lon, eventObj.venue.lat] : [-77.90, 38.03]
-<<<<<<< HEAD
            
-=======
->>>>>>> searches-and-filters
             return(
                         
                <Feature  
