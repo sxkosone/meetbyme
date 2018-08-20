@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactMapboxGl, { Layer, Feature, Popup} from "react-mapbox-gl";
 
-const style = "mapbox://styles/wley3337/cjkx3cn5s1cm12sqs586zo4kr"
+// const style = "mapbox://styles/wley3337/cjkx3cn5s1cm12sqs586zo4kr"
+const style = "mapbox://styles/mapbox/light-v9"
 const mapBoxToken=process.env.REACT_APP_MAPBOX_API
 
 const Map = ReactMapboxGl({
@@ -26,19 +27,23 @@ class MapDoc extends React.PureComponent {
     }
     //this also check to see if any events today
     createEventMarkers= () =>{
-        return this.props.events.length > 0 ? this.props.events.results.map(eventObj => { 
+        // return this.props.events.length > 0 ? 
+        return this.props.events.results.map(eventObj => { 
+            let coordinates = eventObj.venue ? [eventObj.venue.lon, eventObj.venue.lat] : [-77.90, 38.03]
+            console.log(coordinates)
             return(
                         
                <Feature  
                     properties={eventObj} 
-                    coordinates={[eventObj.venue.lon, eventObj.venue.lat]} 
+                    coordinates={coordinates} 
                     onClick={(e) => this.props.selectEventForDisplay(e, eventObj)}
                     onMouseEnter={() => this.handleHover(eventObj)}
                     onMouseLeave={() => this.handleHover(eventObj)}
                     key={`marker-${eventObj.id}`}
                 />                
             ) 
-        }) : null
+        })
+        //  : null
     }
 
     render() {
