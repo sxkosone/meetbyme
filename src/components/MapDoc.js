@@ -30,7 +30,6 @@ class MapDoc extends React.PureComponent {
         // return this.props.events.length > 0 ? 
         return this.props.events.results.map(eventObj => { 
             let coordinates = eventObj.venue ? [eventObj.venue.lon, eventObj.venue.lat] : [-77.90, 38.03]
-            console.log(coordinates)
             return(
                         
                <Feature  
