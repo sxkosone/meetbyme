@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Button, Card, Icon, Image } from 'semantic-ui-react'
+import { Container, Button, Icon, Image } from 'semantic-ui-react'
 
 const PLACEHOLDER_IMG="http://s3shopback.s3-ap-southeast-1.amazonaws.com/my/wp-content/uploads/2015/03/happy-party.jpg"
 
