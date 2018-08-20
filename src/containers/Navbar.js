@@ -68,7 +68,7 @@ export default class Navbar extends Component {
             "Content-Type": "application/json; charset=utf-8",
             Accept: "application/json"
         },
-        body: JSON.stringify({username: username, password: password})
+        body: JSON.stringify({user:{username: username, password: password}})
     })
     .then(r  => r.json())
     .then(json => json["success"] ? (localStorage.setItem("token", `${json['token']}`), this.props.setUserId(json['user_id']), this.props.fetchCurrentUser(json['user_id'])) : alert("Wrong username or password"))

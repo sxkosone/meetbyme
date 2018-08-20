@@ -1,5 +1,5 @@
 import React from 'react'
-import { Item } from 'semantic-ui-react'
+import { Item, Button } from 'semantic-ui-react'
 
 const PLACEHOLDER_IMG="http://s3shopback.s3-ap-southeast-1.amazonaws.com/my/wp-content/uploads/2015/03/happy-party.jpg"
 
@@ -9,10 +9,11 @@ function convertTime(et) {
 }
 
 //-----Note this event is from the DB not from Meetups
-const EventItem = ({eventItem}) =>
+const EventItem = ({eventItem, removeEventFromUser}) =>
 
 <Item>
       <Item.Image size='tiny' src={eventItem.photo_url ? eventItem.photo_url : PLACEHOLDER_IMG} />
+      <Button onClick={() => removeEventFromUser(eventItem)}>Remove from your list</Button>
 
       <Item.Content>
         <Item.Header as='a'>{!eventItem.name ? null:eventItem.name}</Item.Header>

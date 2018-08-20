@@ -166,11 +166,27 @@ class MainDisplay extends React.Component {
     }   
 
 
+    removeEventFromUser = (eventObj) =>{
+        console.log (eventObj)
+        const userId = this.state.userId
+        const data ={ user: { userId: userId, event: eventObj, removeEvent: true} }
+        
+        fetch(`http://localhost:3001/users/${userId}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Token ${localStorage.getItem("token")}`
+          },
+        body: JSON.stringify(data)
+    })
+    .then(r => r.json())
+    .then(userObj => this.setCurrentUser(userObj))
+    }
 
 
     saveEventToUser= (userId, event) => {
-       
-        const data ={ user: { userId: userId, event: this.parseEventForSave(event)} }
+        const data ={ user: { userId: userId, event: this.parseEventForSave(event), removeEvent: false} }
         
         fetch(`http://localhost:3001/users/${userId}`, {
         method: "PATCH",
@@ -206,7 +222,7 @@ class MainDisplay extends React.Component {
                 {this.renderMapIfReady()}
             </div>
 
-            {this.state.currentUser ? <UserShow currentUser ={this.state.currentUser} /> : null}
+            {this.state.currentUser ? <UserShow currentUser ={this.state.currentUser} removeEventFromUser={this.removeEventFromUser}/> : null}
         </div>
     )
     }
