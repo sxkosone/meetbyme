@@ -15,7 +15,7 @@ class MapDoc extends React.PureComponent {
         //set initial map center just once!
         super(props)
         this.state = {
-            focus: null
+            focus: null    
         }
         this.CENTER = [this.props.long, this.props.lat]
         this.ZOOM = [16]  //starting zoom level 0=far away, 20= very close
@@ -27,7 +27,7 @@ class MapDoc extends React.PureComponent {
     }
     //this also check to see if any events today
     createEventMarkers= () =>{
-        // return this.props.events.length > 0 ? 
+      
         return this.props.events.results.map(eventObj => { 
             let coordinates = eventObj.venue ? [eventObj.venue.lon, eventObj.venue.lat] : [-77.90, 38.03]
             return(
@@ -42,7 +42,7 @@ class MapDoc extends React.PureComponent {
                 />                
             ) 
         })
-        //  : null
+
     }
 
     render() {
@@ -72,9 +72,9 @@ class MapDoc extends React.PureComponent {
                     type="symbol"
                     id="meetup"
                     layout={{ "icon-image": "marker-15" }}>
-                    {this.createEventMarkers()}
-                </Layer>
-              {/* adds popup when hovering over event */}
+                    {this.props.events.length > 0 ? this.createEventMarkers() : null}
+                </Layer> 
+           {/* adds popup when hovering over event */}
                 {this.state.focus ? 
                     <Popup
                         coordinates={[this.state.focus.venue.lon, this.state.focus.venue.lat]}

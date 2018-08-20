@@ -102,7 +102,6 @@ class MainDisplay extends React.Component {
         })
     }
     fetchCurrentUserObj = (userId) =>{
-        console.log(userId);
         fetch(BASE_USER_URL + userId, {
             headers: {
                 "Content-Type": "application/json",
@@ -135,7 +134,7 @@ class MainDisplay extends React.Component {
         return !this.state.loading ? <MapDoc 
         long={this.state.long} 
         lat={this.state.lat} 
-        events={this.state.events} 
+        events={this.state.events.results} 
         selectEventForDisplay={this.selectEventForDisplay}
         popUpEvent={this.state.popupEvent}
         togglePopUpFocus={this.focusOnEvent}/> : null
@@ -171,7 +170,7 @@ class MainDisplay extends React.Component {
 
 
     saveEventToUser= (userId, event) => {
-        console.log("event", event, "userid", userId,localStorage.getItem('token') )
+       
         const data ={ user: { userId: userId, event: this.parseEventForSave(event)} }
         
         fetch(`http://localhost:3001/users/${userId}`, {

@@ -12,19 +12,7 @@ class UserShow extends React.Component{
         }
     }
 
-    // componentDidMount(){
-    //     fetch(BASE_URL + this.props.userId, {
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             Accept: "application/json",
-    //             Authorization: `Token ${localStorage.getItem("token")}`
-    //           }
-    //     })
-    //     .then(r => r.json())
-    //     .then(json => this.setState({ user: json}))   
-    // }
-
-    
+   
 
     render(){
         return (
