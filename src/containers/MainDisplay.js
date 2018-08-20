@@ -30,7 +30,7 @@ class MainDisplay extends React.Component {
     }
 
     componentDidMount() {
-        console.log("maindisplay mounted")
+        
         this.getUserLocationAndFetchEvents()
         this.fetchAllCategories()
         
@@ -82,7 +82,7 @@ class MainDisplay extends React.Component {
 
 
     selectEventForDisplay = (e, eventObj) => {
-        console.log("clicked", e)
+
         this.setState({
             selectedEvent: eventObj
         })
@@ -95,7 +95,6 @@ class MainDisplay extends React.Component {
     }
 
     focusOnEvent = (eventObj) => {
-        console.log("focusing on", eventObj)
         let newVal = this.state.popupEvent ? null : eventObj
         this.setState({
             popupEvent: newVal
