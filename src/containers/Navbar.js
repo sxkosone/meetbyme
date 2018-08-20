@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Menu, Form, Input, Button} from 'semantic-ui-react'
-import {Link, NavLink} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
 
 export default class Navbar extends Component {
@@ -127,20 +127,20 @@ displayCreateUserForm = () =>{
     return (
       <div>
         <Menu pointing secondary>
-          <NavLink exact to="/"> 
-            <Menu.Item 
+          {/* <NavLink exact to="/">  */}
+            <Menu.Item as={ Link } exact="true" to="/"
               name='Event Map' 
               active={activeItem === 'Event Map'} 
               onClick={this.handleItemClick} />
-          </NavLink>
+          {/* </NavLink> */}
 
-            { this.props.currentUser ?   <NavLink exact to="/my-events">
-                  <Menu.Item
+            { this.props.currentUser ?   
+                  <Menu.Item as={ Link } exact="true" to="/my-events"
                     name='My Events'
                     active={activeItem === 'My Events'}
                     onClick={this.handleItemClick}
                   />
-                </NavLink>
+                
                 :
 
               null

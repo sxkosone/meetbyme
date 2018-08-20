@@ -6,7 +6,7 @@ import '../index.css'
 import { Dimmer, Loader } from 'semantic-ui-react'
 import Navbar from './Navbar'
 import UserShow from './UserShow'
-import { Route, Link, Switch} from 'react-router-dom'
+import { Route } from 'react-router-dom'
 
 
 const BASE_URL="http://localhost:3001/search"
@@ -73,9 +73,9 @@ class MainDisplay extends React.Component {
         })
     }
 
-    handleUserEventSearch = (searchTerm, categoryId) => {
+    handleUserEventSearch = (searchTerm, categoryId, radius) => {
         console.log("searching with", searchTerm, "and category", categoryId)
-        fetch(`${BASE_URL}?lat=${this.state.lat}&long=${this.state.long}&text=${searchTerm}&category=${categoryId}`).then(r => r.json())
+        fetch(`${BASE_URL}?lat=${this.state.lat}&long=${this.state.long}&radius=${radius}&text=${searchTerm}&category=${categoryId}`).then(r => r.json())
         .then(response => {
             console.log(response)
             this.setState({
