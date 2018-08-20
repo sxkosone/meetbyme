@@ -24,12 +24,12 @@ class MapDoc extends React.PureComponent {
     handleHover = (eventObj) => {
        this.state.focus ? this.setState({focus: null}) : this.setState({focus: eventObj})
     }
-
+    //this also check to see if any events today
     createEventMarkers= () =>{
-        return this.props.events.results.map(eventObj => { 
+        return this.props.events.length > 0 ? this.props.events.results.map(eventObj => { 
             return(
                         
-                <Feature  
+               <Feature  
                     properties={eventObj} 
                     coordinates={[eventObj.venue.lon, eventObj.venue.lat]} 
                     onClick={(e) => this.props.selectEventForDisplay(e, eventObj)}
@@ -37,8 +37,8 @@ class MapDoc extends React.PureComponent {
                     onMouseLeave={() => this.handleHover(eventObj)}
                     key={`marker-${eventObj.id}`}
                 />                
-            )
-        })
+            ) 
+        }) : null
     }
 
     render() {
