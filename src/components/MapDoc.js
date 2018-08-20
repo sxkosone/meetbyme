@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactMapboxGl, { Layer, Feature, Popup} from "react-mapbox-gl";
 
-const style = "mapbox://styles/wley3337/cjkx3cn5s1cm12sqs586zo4kr"
+const style = "mapbox://styles/wley3337/cjkwtf1sp1a8b2ro0ojr9f8oe"
 const mapBoxToken=process.env.REACT_APP_MAPBOX_API
 
 const Map = ReactMapboxGl({
@@ -14,7 +14,7 @@ class MapDoc extends React.PureComponent {
         //set initial map center just once!
         super(props)
         this.state = {
-            focus: null
+            focus: null    
         }
         this.CENTER = [this.props.long, this.props.lat]
         this.ZOOM = [16]  //starting zoom level 0=far away, 20= very close
@@ -26,7 +26,8 @@ class MapDoc extends React.PureComponent {
     }
     //this also check to see if any events today
     createEventMarkers= () =>{
-        return this.props.events.length > 0 ? this.props.events.results.map(eventObj => { 
+        return  this.props.events.map(eventObj => { 
+            if(!!eventObj.venue){
             return(
                         
                <Feature  
@@ -37,8 +38,8 @@ class MapDoc extends React.PureComponent {
                     onMouseLeave={() => this.handleHover(eventObj)}
                     key={`marker-${eventObj.id}`}
                 />                
-            ) 
-        }) : null
+            ) }
+        })
     }
 
     render() {
@@ -68,9 +69,9 @@ class MapDoc extends React.PureComponent {
                     type="symbol"
                     id="meetup"
                     layout={{ "icon-image": "marker-15" }}>
-                    {this.createEventMarkers()}
-                </Layer>
-              {/* adds popup when hovering over event */}
+                    {this.props.events.length > 0 ? this.createEventMarkers() : null}
+                </Layer> 
+           {/* adds popup when hovering over event */}
                 {this.state.focus ? 
                     <Popup
                         coordinates={[this.state.focus.venue.lon, this.state.focus.venue.lat]}
