@@ -5,7 +5,8 @@ class Search extends React.Component {
     constructor() {
         super()
         this.state = {
-            searchTerm: ""
+            searchTerm: "",
+            categoryId: 0
         }
     }
     generateOptionFields() {
@@ -14,21 +15,38 @@ class Search extends React.Component {
         })
     }
 
-    handleCategorySearch = () => {
-        const categoryId = document.querySelector(".selected.item").id
-        this.props.searchByCategory(categoryId)
+    updateCategory = () => {
+        this.setState({
+            categoryId: document.querySelector(".selected.item").id
+        })
     }
+
+    handleUserEventSearch = () => {
+        let categoryId = document.querySelector(".selected.item").id
+        this.props.handleUserEventSearch(this.state.searchTerm, categoryId)
+    }
+
+    // clearSearch = () => {
+    //     this.forceUpdate();
+    //     this.setState({
+    //         searchTerm: "",
+    //         categoryId: 0
+    //     })
+    //     this.props.handleUserEventSearch(this.state.searchTerm, 0)
+    // }
+
     render() {
         return (
             <Form >
                 <Form.Field inline>
-                <label>Search events</label>
+                <label>Keyword</label>
                 <Input placeholder='search' onChange={(e) => this.setState({searchTerm: e.target.value})} value={this.state.searchTerm}/>
-                </Form.Field>
-                <Form.Field inline>
-                <label>Search events by category</label>
-                <Dropdown placeholder='Select Country' search selection options={this.generateOptionFields()}/>
-                <Button onClick={this.handleCategorySearch}>Search by category</Button>
+                {/* </Form.Field>
+                <Form.Field inline> */}
+                <label>Category</label>
+                <Dropdown placeholder='Select Category' search selection options={this.generateOptionFields()}/>
+                
+                <Button content='Primary' primary onClick={() => this.handleUserEventSearch(this.state.searchTerm)}>Search</Button>
                 </Form.Field>
             </Form>
         )
