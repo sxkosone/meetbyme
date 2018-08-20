@@ -56,15 +56,31 @@ class MainDisplay extends React.Component {
     }
 
     fetchAllCategories = () => {
+        const allCategories={name: "All categories", sort_name: "All Categories", id: 0, shortname: "All"}
         fetch(BASE_URL+"/categories")
         .then(r => r.json())
-        .then(data => this.categories=data.results)
+        .then(data => this.categories=[allCategories,...data.results])
     }
 
     fetchEventsByCategory = (categoryId) => {
         //should I change state back to loading: true
         fetch(`${BASE_URL}?lat=${this.state.lat}&long=${this.state.long}&category=${categoryId}`).then(r => r.json())
-        .then(console.log)
+        .then(response => {
+            this.setState({
+                events:response
+            })
+        })
+    }
+
+    handleUserEventSearch = (searchTerm, categoryId) => {
+        console.log("searching with", searchTerm, "and category", categoryId)
+        fetch(`${BASE_URL}?lat=${this.state.lat}&long=${this.state.long}&text=${searchTerm}&category=${categoryId}`).then(r => r.json())
+        .then(response => {
+            console.log(response)
+            this.setState({
+                events:response
+            })
+        })
     }
 
     getUserLocationAndFetchEvents = () => {
@@ -191,7 +207,10 @@ class MainDisplay extends React.Component {
         return (
         <div>
             <Navbar setUserId={this.setUserId} logOut={this.handleLogOut} fetchCurrentUser={this.fetchCurrentUserObj}/>
-            <Search categories={this.categories} searchByCategory={this.fetchEventsByCategory}/>
+            <Search 
+                categories={this.categories} 
+                // searchByCategory={this.fetchEventsByCategory}
+                handleUserEventSearch={this.handleUserEventSearch}/>
             
             <div className="dataDisplayContainer">
                 {this.showLoadingAnimation()}

@@ -30,7 +30,6 @@ class MapDoc extends React.PureComponent {
     createEventMarkers= () =>{
         return this.props.events.map(eventObj => { 
             let coordinates = eventObj.venue ? [eventObj.venue.lon, eventObj.venue.lat] : [-77.90, 38.03]
-            console.log(coordinates)
             return(
                         
                <Feature  
@@ -49,7 +48,8 @@ class MapDoc extends React.PureComponent {
     render() {
         return( 
         <div>
-        { (this.props.long && this.props.events.length !== 0) ? 
+            {this.props.events.length === 0 ? <h2>No events found with those search terms!</h2> : null}
+        { (this.props.long) ? 
              <Map
              //this is where you set the initial style properties of the map. Style is built on MapBox
                 style={`${style}`}
@@ -75,6 +75,8 @@ class MapDoc extends React.PureComponent {
                     layout={{ "icon-image": "marker-15" }}>
                     {this.props.events.length > 0 ? this.createEventMarkers() : null}
                 </Layer> 
+                
+                
            {/* adds popup when hovering over event */}
                 {this.state.focus ? 
                     <Popup
