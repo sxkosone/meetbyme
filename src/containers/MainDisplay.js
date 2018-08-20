@@ -253,10 +253,14 @@ class MainDisplay extends React.Component {
                 )} } 
                 /> 
                 <Route exact path="/my-events" render ={() =>{
-                    if(this.state.currentUser){
+                    if(this.state.currentUser && localStorage.getItem('token')){
                     return(
                     <UserShow currentUser ={this.state.currentUser} removeEventFromUser={this.removeEventFromUser}/> 
-                )}}}/>
+                )}else{
+                   return <h1>Please log in to view your events</h1>
+                }
+            
+                }}/>
 
 
         </div>
