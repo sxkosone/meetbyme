@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { Menu, Form, Input, Button} from 'semantic-ui-react'
+import {Link, NavLink} from 'react-router-dom'
 
 
 export default class Navbar extends Component {
   state = { 
-      activeItem: 'home',
+      activeItem: 'Event Map',
       username: '',
       password: '',
       firstName: '',
@@ -74,69 +75,92 @@ export default class Navbar extends Component {
     .then(json => json["success"] ? (localStorage.setItem("token", `${json['token']}`), this.props.setUserId(json['user_id']), this.props.fetchCurrentUser(json['user_id'])) : alert("Wrong username or password"))
 }
 
+displayUserLogInForm =() =>{
+  return (
+    <React.Fragment>
+    <Form>
+        <Form.Field inline>
+        <label>UserName</label>
+        <Input placeholder='username' value={this.state.username} onChange={(e) => this.setState({ username: e.target.value})}/>
+        </Form.Field>
+        <Form.Field inline>
+        <label>Password</label>
+        <Input type="password" placeholder='password' value={this.state.password} onChange={(e) => this.setState({ password: e.target.value})}/>
+        </Form.Field>
+        <Button onClick={this.handleLogin}>LogIn</Button>
+    </Form>
+
+    <Button onClick={this.setSignUp}>Create an account</Button>
+</React.Fragment>
+    
+  )
+}
+
+displayCreateUserForm = () =>{
+  return(
+    <Form>
+        <Form.Field inline>
+          <label>UserName</label>
+          <Input placeholder='username' value={this.state.username} onChange={(e) => this.setState({ username: e.target.value})}/>
+          </Form.Field>
+        <Form.Field inline>
+          <label>Password</label>
+          <Input type="password" placeholder='password' value={this.state.password} onChange={(e) => this.setState({ password: e.target.value})}/>
+          </Form.Field>
+        <Form.Field inline>
+          <label>First Name</label>
+          <Input type="first_name" placeholder='first name' value={this.state.firstName} onChange={(e) => this.setState({ firstName: e.target.value})}/>
+        </Form.Field>
+        <Form.Field inline>
+          <label>Last Name</label>
+          <Input type="last_name" placeholder='last name' value={this.state.lastName} onChange={(e) => this.setState({ lastName: e.target.value})}/>
+        </Form.Field>
+        <Button onClick={this.handleCreateUser}>Create User</Button>
+        <Button onClick={this.setSignUp}>Back to Login</Button>
+    </Form> 
+  )
+}
+
   render() {
     const { activeItem } = this.state
 
     return (
       <div>
         <Menu pointing secondary>
-          <Menu.Item name='home' active={activeItem === 'home'} onClick={this.handleItemClick} />
-          <Menu.Item
-            name='messages'
-            active={activeItem === 'messages'}
-            onClick={this.handleItemClick}
-          />
-          <Menu.Item
-            name='friends'
-            active={activeItem === 'friends'}
-            onClick={this.handleItemClick}
-          />
+          <NavLink exact to="/"> 
+            <Menu.Item 
+              name='Event Map' 
+              active={activeItem === 'Event Map'} 
+              onClick={this.handleItemClick} />
+          </NavLink>
+
+            { this.props.currentUser ?   <NavLink exact to="/my-events">
+                  <Menu.Item
+                    name='My Events'
+                    active={activeItem === 'My Events'}
+                    onClick={this.handleItemClick}
+                  />
+                </NavLink>
+                :
+
+              null
+            }
+          
           <Menu.Menu position='right'>
-              {this.state.signUp ? 
-                
-                <Form>
-                    <Form.Field inline>
-                      <label>UserName</label>
-                      <Input placeholder='username' value={this.state.username} onChange={(e) => this.setState({ username: e.target.value})}/>
-                      </Form.Field>
-                    <Form.Field inline>
-                      <label>Password</label>
-                      <Input type="password" placeholder='password' value={this.state.password} onChange={(e) => this.setState({ password: e.target.value})}/>
-                      </Form.Field>
-                    <Form.Field inline>
-                      <label>First Name</label>
-                      <Input type="first_name" placeholder='first name' value={this.state.firstName} onChange={(e) => this.setState({ firstName: e.target.value})}/>
-                    </Form.Field>
-                    <Form.Field inline>
-                      <label>Last Name</label>
-                      <Input type="last_name" placeholder='last name' value={this.state.lastName} onChange={(e) => this.setState({ lastName: e.target.value})}/>
-                    </Form.Field>
-                    <Button onClick={this.handleCreateUser}>Create User</Button>
-                </Form> 
-                : 
-                  
-                <Button onClick={this.setSignUp}>Create an account</Button>
-                
-              }
-           
-                <Form>
-                    <Form.Field inline>
-                    <label>UserName</label>
-                    <Input placeholder='username' value={this.state.username} onChange={(e) => this.setState({ username: e.target.value})}/>
-                    </Form.Field>
-                    <Form.Field inline>
-                    <label>Password</label>
-                    <Input type="password" placeholder='password' value={this.state.password} onChange={(e) => this.setState({ password: e.target.value})}/>
-                    </Form.Field>
-                    <Button onClick={this.handleLogin}>LogIn</Button>
-                </Form>
             
-            <Menu.Item
-              name='logout'
-              active={activeItem === 'logout'}
-              onClick={this.props.logOut}
-            />
+          
+
+            {this.props.currentUser ? 
+                <Menu.Item
+                  name='logout'
+                  active={activeItem === 'logout'}
+                  onClick={this.props.logOut}
+                /> 
+              :  (this.state.signUp ?  this.displayCreateUserForm() : this.displayUserLogInForm())
+            }
+              
           </Menu.Menu>
+            
         </Menu>
 
       

@@ -6,6 +6,7 @@ import '../index.css'
 import { Dimmer, Loader } from 'semantic-ui-react'
 import Navbar from './Navbar'
 import UserShow from './UserShow'
+import { Route, Link, Switch} from 'react-router-dom'
 
 
 const BASE_URL="http://localhost:3001/search"
@@ -221,27 +222,43 @@ class MainDisplay extends React.Component {
     render() {
         return (
         <div>
-            <Navbar setUserId={this.setUserId} logOut={this.handleLogOut} fetchCurrentUser={this.fetchCurrentUserObj}/>
-            <Search 
-                categories={this.categories} 
-                // searchByCategory={this.fetchEventsByCategory}
-                handleUserEventSearch={this.handleUserEventSearch}/>
+            <Navbar 
+                setUserId={this.setUserId} 
+                logOut={this.handleLogOut} 
+                fetchCurrentUser={this.fetchCurrentUserObj}
+                currentUser={this.state.currentUser}
+            />
             
-            <div className="dataDisplayContainer">
-                {this.showLoadingAnimation()}
-                {this.state.selectedEvent ? 
-                    <EventDisplay 
-                        event={this.state.selectedEvent} 
-                        closeDisplay={this.closeDisplay}
-                        userId= {this.state.userId ? this.state.userId : null}
-                        saveEventToUser= {this.state.userId ? this.saveEventToUser : null}
-                    /> 
-                      : 
-                    null}
-                {this.renderMapIfReady()}
-            </div>
+            <Route exact path="/" render= {() => {
+                return(
+                    <React.Fragment>
+                            <Search 
+                                categories={this.categories} 
+                                // searchByCategory={this.fetchEventsByCategory}
+                                handleUserEventSearch={this.handleUserEventSearch}/>
+                            <div className="dataDisplayContainer">
+                                {this.showLoadingAnimation()}
+                                {this.state.selectedEvent ? 
+                                    <EventDisplay 
+                                        event={this.state.selectedEvent} 
+                                        closeDisplay={this.closeDisplay}
+                                        userId= {this.state.userId ? this.state.userId : null}
+                                        saveEventToUser= {this.state.userId ? this.saveEventToUser : null}
+                                    /> 
+                                    : 
+                                    null}
+                                {this.renderMapIfReady()}
+                            </div>
+                    </React.Fragment>
+                )} } 
+                /> 
+                <Route exact path="/my-events" render ={() =>{
+                    if(this.state.currentUser){
+                    return(
+                    <UserShow currentUser ={this.state.currentUser} removeEventFromUser={this.removeEventFromUser}/> 
+                )}}}/>
 
-            {this.state.currentUser ? <UserShow currentUser ={this.state.currentUser} removeEventFromUser={this.removeEventFromUser}/> : null}
+
         </div>
     )
     }

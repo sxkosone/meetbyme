@@ -5,10 +5,10 @@ import EventItem from '../components/EventItem';
 const BASE_URL="http://localhost:3001/users/"
 class UserShow extends React.Component{
 
-    constructor({currentUser}){
-        super({currentUser})
+    constructor(props){
+        super(props)
         this.state ={
-            user: currentUser
+            user: props.currentUser
         }
     }
 
