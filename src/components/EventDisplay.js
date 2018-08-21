@@ -10,7 +10,7 @@ const EventDisplay = ({event, closeDisplay, saveEventToUser}) => {
         const date = d.toDateString()
         const hours = d.getHours()
         const minutes = d.getMinutes()
-        return `${hours}:${minutes} on ${date}`
+        return `${hours}:${minutes > 10? minutes : "0" + minutes} on ${date}`
     }
     
     return (
