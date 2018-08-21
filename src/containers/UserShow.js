@@ -1,5 +1,6 @@
 import React from 'react'
 import EventItem from '../components/EventItem';
+import { Item } from 'semantic-ui-react'
 
 // const BASE_USER_URL="http://localhost:3001/users/current-user"
 const BASE_USER_URL="https://serene-headland-62664.herokuapp.com/users/current-user"
@@ -48,13 +49,14 @@ class UserShow extends React.Component{
 
         render(){
            if(this.state.user){
-            return <React.Fragment>
-                        <p>User Show</p>
-                        <p>{this.state.user.first_name} {this.state.user.last_name}</p>
+            return (
+                <Item.Group relaxed className="user-event-list">
                         {this.state.user.events.map(event => <EventItem key={event.id} eventItem={event} removeEventFromUser={this.removeEventFromUser}/>)}
-                    </React.Fragment>  
+                </Item.Group>
+            )
+                
            }else{
-               return  <h1>Please log in to view your events</h1>
+               return <h1>Please log in to view your events</h1>
             }     
         }
     

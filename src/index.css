@@ -16,3 +16,7 @@ body {
   overflow: auto;
 }
 
+.user-event-list {
+  padding: 3rem;
+}
+
