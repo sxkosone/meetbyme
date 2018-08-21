@@ -7,7 +7,7 @@ function millisToMinutesAndSeconds(millis) {
   
   var minutes = Math.floor(millis / 60000);
   var hours = Math.floor(minutes/60);
-  return hours + ":" + minutes%60;
+  return hours + ":" + (minutes%60 > 10 ? minutes%60 : "0" + minutes%60 );
 }
 
 //-----Note this event is from the DB not from Meetups
