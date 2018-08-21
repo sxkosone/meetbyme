@@ -62,22 +62,20 @@ class MapDoc extends React.PureComponent {
                 center={this.CENTER}
                 zoom = {this.ZOOM}
              >
-             
-                <Layer
-                    type="symbol"
-                    id="me"
-                    layout={{ "icon-image": "marker-15" }}>
-                    <Feature coordinates={[this.props.long, this.props.lat]}/>                    
-                </Layer>
-
                 <Layer
                     type="symbol"
                     id="meetup"
-                    layout={{ "icon-image": "marker-15" }}>
+                    layout={{ "icon-image": "star-15" }}>
                     {(this.props.events === undefined || this.props.events.length=== 0) ? null : this.createEventMarkers() }
                 </Layer> 
-                
-                
+
+                <Layer
+                    type="symbol"
+                    id="me"
+                    layout={{ "icon-image": "star-stroked-15" }}>
+                    <Feature coordinates={[this.props.long, this.props.lat]}/>                    
+                </Layer>
+
            {/* adds popup when hovering over event */}
                 {this.state.focus ? 
                     <Popup

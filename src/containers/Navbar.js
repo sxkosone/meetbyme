@@ -101,20 +101,22 @@ handleLogOut = () => {
 
 displayUserLogInForm =() =>{
   return (
-    <React.Fragment>
       <Form>
-          <Form.Field inline>
+        <Form.Group className="search-form">
+          <Form.Field inline className="search-inputs">
           <label>UserName</label>
           <Input placeholder='username' value={this.state.username} onChange={(e) => this.setState({ username: e.target.value})}/>
-          
+          </Form.Field>
+          <Form.Field inline className="search-inputs">
           <label>Password</label>
           <Input type="password" placeholder='password' value={this.state.password} onChange={(e) => this.setState({ password: e.target.value})}/>
+          </Form.Field>
+          <Form.Field inline>
           <Button onClick={this.handleLogin}>LogIn</Button>
           <Button primary onClick={this.setSignUp}>Create an account</Button>
           </Form.Field>
-          
+        </Form.Group>
       </Form>             
-    </React.Fragment>
     
   )
 }
@@ -150,6 +152,7 @@ displayCreateUserForm = () =>{
     return (
       <div>
         <Menu pointing secondary>
+            <Menu.Item header>Meet By Me</Menu.Item>
             <Menu.Item as={ Link } exact="true" to="/"
               name='Event Map' 
               active={activeItem === 'Event Map'} 
@@ -162,9 +165,7 @@ displayCreateUserForm = () =>{
                     active={activeItem === 'My Events'}
                     onClick={this.handleItemClick}
                   />
-                  <Menu.Item
-                  name={`Currently logged in as ${this.state.user.first_name}`}
-                  />
+                  <Menu.Item>{`Welcome, ${this.state.user.first_name}!`}</Menu.Item>
               </React.Fragment>
                 :
               null
