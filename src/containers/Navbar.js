@@ -102,7 +102,7 @@ handleLogOut = () => {
 displayUserLogInForm =() =>{
   return (
       <Form>
-        <Form.Group className="search-form">
+        <Form.Group >
           <Form.Field inline className="search-inputs">
           <label>UserName</label>
           <Input placeholder='username' value={this.state.username} onChange={(e) => this.setState({ username: e.target.value})}/>
@@ -123,7 +123,7 @@ displayUserLogInForm =() =>{
 
 displayCreateUserForm = () =>{
   return(
-    <Form>
+    <Form >
         <Form.Field inline>
           <label>UserName</label>
           <Input placeholder='username' value={this.state.username} onChange={(e) => this.setState({ username: e.target.value})}/>
@@ -150,8 +150,8 @@ displayCreateUserForm = () =>{
     const { activeItem } = this.state
 
     return (
-      <div>
-        <Menu pointing secondary>
+      <div className="nav-bar">
+        <Menu pointing secondary >
             <Menu.Item header>Meet By Me</Menu.Item>
             <Menu.Item as={ Link } exact="true" to="/"
               name='Event Map' 
