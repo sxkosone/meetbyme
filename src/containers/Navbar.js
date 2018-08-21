@@ -76,6 +76,7 @@ export default class Navbar extends Component {
       signUp: false
     })
   }
+ 
 
 
   userLogIn = (username, password)=>{

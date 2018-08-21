@@ -3,7 +3,7 @@ import { Container, Button, Icon, Image } from 'semantic-ui-react'
 
 const PLACEHOLDER_IMG="http://s3shopback.s3-ap-southeast-1.amazonaws.com/my/wp-content/uploads/2015/03/happy-party.jpg"
 
-const EventDisplay = ({event, closeDisplay, userId, saveEventToUser}) => {
+const EventDisplay = ({event, closeDisplay, saveEventToUser}) => {
 
     function convertTime() {
         let d = new Date(event.time)
@@ -13,7 +13,7 @@ const EventDisplay = ({event, closeDisplay, userId, saveEventToUser}) => {
     return (
             <Container className="event-container">
                 <Button icon onClick={closeDisplay}><Icon name='window close' /></Button>
-                {userId ? <Button onClick={() => saveEventToUser(userId, event)} >Save Event</Button> : null}
+                {localStorage.getItem("token") ? <Button onClick={() => saveEventToUser(event)} >Save Event</Button> : null}
                 <h2>{event.name}</h2>
                 <Image src={event.photo_url ? event.photo_url : PLACEHOLDER_IMG} fluid />
                 <p>{convertTime()}</p>

@@ -43,7 +43,8 @@ componentDidMount() {
 
 fetchInitialEvents = (lat, long) => {
     //returns a promise that holds the results of our API call to MEETUP
-    return fetch(`${BASE_URL}?lat=${lat}&long=${long}`).then(r => r.json())   
+    return fetch(`${BASE_URL}?lat=${lat}&long=${long}&radius=5`).then(r => r.json())
+    
 }
 
 fetchAllCategories = () => {
@@ -78,6 +79,7 @@ handleUserEventSearch = (searchTerm, categoryId) => {
     })
 }
 
+
 fetchCurrentUserObj = (userId) =>{
     fetch(BASE_USER_URL + userId, {
         headers: {
@@ -91,28 +93,30 @@ fetchCurrentUserObj = (userId) =>{
 }
 
 
-removeEventFromUser = (eventObj) =>{
-    console.log (eventObj)
-    const userId = this.state.userId
-    const data ={ user: { userId: userId, event: eventObj, removeEvent: true} }
+//moved to UserShow
+// removeEventFromUser = (eventObj) =>{
+//     console.log (eventObj)
+//     const userId = this.state.userId
+//     const data ={ user: { userId: userId, event: eventObj, removeEvent: true} }
     
-    fetch(`http://localhost:3001/users/${userId}`, {
-    method: "PATCH",
-    headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Token ${localStorage.getItem("token")}`
-      },
-    body: JSON.stringify(data)
-})
-.then(r => r.json())
-.then(userObj => this.setCurrentUser(userObj))
-}
+//     fetch(`http://localhost:3001/users/${userId}`, {
+//     method: "PATCH",
+//     headers: {
+//         "Content-Type": "application/json",
+//         Accept: "application/json",
+//         Authorization: `Token ${localStorage.getItem("token")}`
+//       },
+//     body: JSON.stringify(data)
+// })
+// .then(r => r.json())
+// .then(userObj => this.setCurrentUser(userObj))
+// }
 
-saveEventToUser= (userId, event) => {
-    const data ={ user: { userId: userId, event: this.parseEventForSave(event), removeEvent: false} }
+//called from EventDisplay to add event to user
+saveEventToUser= (event) => {
+    const data ={ user: { event: this.parseEventForSave(event), removeEvent: false} }
     
-    fetch(`http://localhost:3001/users/${userId}`, {
+    fetch(`http://localhost:3001/users/current-user`, {
     method: "PATCH",
     headers: {
         "Content-Type": "application/json",
@@ -123,12 +127,14 @@ saveEventToUser= (userId, event) => {
 })
 .then(r => r.json())
 .then(userObj => this.setCurrentUser(userObj)) //this updates the user object to update showpage elements
-
+                //this may need to change as we may not need to set a userOBJ with token auth
 }
 
+//does not require user login but does require user to accept GEO location
 getUserLocationAndFetchEvents = () => {
     navigator.geolocation.getCurrentPosition((pos) => {
-        this.fetchInitialEvents(pos.coords.latitude, pos.coords.longitude).then(response => {
+        this.fetchInitialEvents(pos.coords.latitude, pos.coords.longitude)
+        .then(response => {
             this.setState({
             events: response,
             long: pos.coords.longitude,
