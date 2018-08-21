@@ -13,7 +13,7 @@ import EventItem from '../components/EventItem';
 
 // export default UserShow
 
-const BASE_USER_URL="http://localhost:3001/users/"
+const BASE_USER_URL="http://localhost:3001/users/current-user"
 
 class UserShow extends React.Component{
 
@@ -23,26 +23,46 @@ class UserShow extends React.Component{
                 user: null
             }
         }
+
+    componentDidMount(){
+        fetch(BASE_USER_URL, {
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                Authorization: `Token ${localStorage.getItem("token")}`
+                }
+        })
+        .then(r => r.json())
+        .then(userObj => this.setState({user: userObj}))
+    
+    }
+
+    removeEventFromUser = (eventObj) =>{
+
+        const data ={ user: { event: eventObj, removeEvent: true} }
+        
+        fetch(BASE_USER_URL, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                Authorization: `Token ${localStorage.getItem("token")}`
+                },
+            body: JSON.stringify(data)
+        })
+        .then(r => r.json())
+        .then(userObj => this.setState({user: userObj}))
+    }
     
 
-        componentDidMount(){
-                fetch(BASE_USER_URL + "current-user", {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                        Authorization: `Token ${localStorage.getItem("token")}`
-                      }
-                })
-                .then(r => r.json())
-                .then(userObj => this.setState({user: userObj}))
-            
-        }
+ 
+
         render(){
            if( this.state.user){
             return <React.Fragment>
                         <p>User Show</p>
                         <p>{this.state.user.first_name} {this.state.user.last_name}</p>
-                        {this.state.user.events.map(event => <EventItem key={event.id} eventItem={event} removeEventFromUser={this.props.removeEventFromUser}/>)}
+                        {this.state.user.events.map(event => <EventItem key={event.id} eventItem={event} removeEventFromUser={this.removeEventFromUser}/>)}
                     </React.Fragment>  
            }else{
                return  <h1>Please log in to view your events</h1>
