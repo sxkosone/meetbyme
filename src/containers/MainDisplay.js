@@ -174,9 +174,12 @@ handleUserEventSearch = (searchTerm, categoryId, radius) => {
 //----Data formating methods
 
     //manages Date Time for display and DB persistance (work around for large number issues with DB)
-    convertTime(time) {
+   convertTime(time) {
         let d = new Date(time)
-        return d.toString()
+        const date = d.toDateString()
+        const hours = d.getHours()
+        const minutes = d.getMinutes()
+        return `${hours}:${minutes} on ${date}`
     }
 
     //takes data from Meetup Json structure and formats it for DB persistance

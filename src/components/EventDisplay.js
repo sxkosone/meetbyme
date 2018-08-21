@@ -7,7 +7,10 @@ const EventDisplay = ({event, closeDisplay, saveEventToUser}) => {
 
     function convertTime() {
         let d = new Date(event.time)
-        return d.toString()
+        const date = d.toDateString()
+        const hours = d.getHours()
+        const minutes = d.getMinutes()
+        return `${hours}:${minutes} on ${date}`
     }
     
     return (
@@ -17,7 +20,7 @@ const EventDisplay = ({event, closeDisplay, saveEventToUser}) => {
                 <h2>{event.name}</h2>
                 <Image src={event.photo_url ? event.photo_url : PLACEHOLDER_IMG} fluid />
                 <p>{convertTime()}</p>
-                <p>{event.description.slice(0, 140)}</p>
+                <p>{event.description}</p>
                 <p>{event.venue.address_1}</p>
                 
             </Container>
