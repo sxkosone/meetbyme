@@ -15,13 +15,13 @@ const EventDisplay = ({event, closeDisplay, saveEventToUser}) => {
     
     return (
             <Container className="event-container">
-                <Button icon onClick={closeDisplay}><Icon name='window close' /></Button>
-                {localStorage.getItem("token") ? <Button onClick={() => saveEventToUser(event)} >Save Event</Button> : null}
+                <Button secondary onClick={closeDisplay}>Close</Button>
+                {localStorage.getItem("token") ? <Button color="green" onClick={() => saveEventToUser(event)} >Save Event</Button> : null}
                 <h2>{event.name}</h2>
                 <Image src={event.photo_url ? event.photo_url : PLACEHOLDER_IMG} fluid />
                 <p>{convertTime()}</p>
                 <p>{event.description}</p>
-                <p>{event.venue.address_1}</p>
+                <p><strong>{event.venue.address_1}</strong></p>
                 
             </Container>
         )

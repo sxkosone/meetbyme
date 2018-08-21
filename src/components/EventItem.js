@@ -23,7 +23,7 @@ const EventItem = ({eventItem, removeEventFromUser}) =>
         </Item.Description>
         <Item.Extra>Time: {!eventItem.time ? null : eventItem.time} </Item.Extra>
         <Item.Extra>Duration: {!eventItem.duration ? null : millisToMinutesAndSeconds(eventItem.duration)} </Item.Extra>
-        <Item.Extra>Loctation {!eventItem.address ? null : eventItem.address}, {!eventItem.city ? null : eventItem.city} </Item.Extra>
+        <Item.Extra>Location: {!eventItem.address ? null : eventItem.address}, {!eventItem.city ? null : eventItem.city} </Item.Extra>
         <a href={eventItem.event_url} target="_blank">View Meetup Page</a>
         <Button secondary floated="right" onClick={() => removeEventFromUser(eventItem)}>Remove from list</Button>
       </Item.Content>
