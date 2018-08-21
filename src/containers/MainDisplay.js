@@ -30,17 +30,136 @@ class MainDisplay extends React.Component {
         this.categories = []
     }
 
-    componentDidMount() {
-        
-        this.getUserLocationAndFetchEvents()
-        this.fetchAllCategories()
+componentDidMount() {   
+    //get User location from browser and get events
+    this.getUserLocationAndFetchEvents()
+    //get all catagories from Meetup
+    this.fetchAllCategories()     
+}
+
+
+//------fetch methods
+
+
+fetchInitialEvents = (lat, long) => {
+    //returns a promise that holds the results of our API call to MEETUP
+    return fetch(`${BASE_URL}?lat=${lat}&long=${long}`).then(r => r.json())   
+}
+
+fetchAllCategories = () => {
+    const allCategories={name: "All categories", sort_name: "All Categories", id: 0, shortname: "All"}
+    fetch(BASE_URL+"/categories")
+    .then(r => r.json())
+    .then(data => this.categories=[allCategories, data])//look at this later
+}
+
+fetchEventsByCategory = (categoryId) => {
+    //should I change state back to loading: true
+    fetch(`${BASE_URL}?lat=${this.state.lat}&long=${this.state.long}&category=${categoryId}`).then(r => r.json())
+    .then(response => {
+        this.setState({
+            events:response
+        })
+    })
+}
+
+
+    fetchInitialEvents = (lat, long) => {
+        //returns a promise that holds the results of our API call to MEETUP
+        return fetch(`${BASE_URL}?lat=${lat}&long=${long}&radius=5`).then(r => r.json())
         
     }
+handleUserEventSearch = (searchTerm, categoryId) => {
+    fetch(`${BASE_URL}?lat=${this.state.lat}&long=${this.state.long}&text=${searchTerm}&category=${categoryId}`).then(r => r.json())
+    .then(response => {
+        this.setState({
+            events:response
+        })
+    })
+}
 
+fetchCurrentUserObj = (userId) =>{
+    fetch(BASE_USER_URL + userId, {
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Token ${localStorage.getItem("token")}`
+          }
+    })
+    .then(r => r.json())
+    .then(userObj => this.setCurrentUser(userObj))
+}
+
+
+removeEventFromUser = (eventObj) =>{
+    console.log (eventObj)
+    const userId = this.state.userId
+    const data ={ user: { userId: userId, event: eventObj, removeEvent: true} }
+    
+    fetch(`http://localhost:3001/users/${userId}`, {
+    method: "PATCH",
+    headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Token ${localStorage.getItem("token")}`
+      },
+    body: JSON.stringify(data)
+})
+.then(r => r.json())
+.then(userObj => this.setCurrentUser(userObj))
+}
+
+saveEventToUser= (userId, event) => {
+    const data ={ user: { userId: userId, event: this.parseEventForSave(event), removeEvent: false} }
+    
+    fetch(`http://localhost:3001/users/${userId}`, {
+    method: "PATCH",
+    headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Token ${localStorage.getItem("token")}`
+      },
+    body: JSON.stringify(data)
+})
+.then(r => r.json())
+.then(userObj => this.setCurrentUser(userObj)) //this updates the user object to update showpage elements
+
+}
+
+getUserLocationAndFetchEvents = () => {
+    navigator.geolocation.getCurrentPosition((pos) => {
+        this.fetchInitialEvents(pos.coords.latitude, pos.coords.longitude).then(response => {
+            this.setState({
+            events: response,
+            long: pos.coords.longitude,
+            lat: pos.coords.latitude,
+            loading: false
+            })
+        })
+    })
+}
+
+
+handleUserEventSearch = (searchTerm, categoryId, radius) => {
+    console.log("searching with", searchTerm, "and category", categoryId)
+    fetch(`${BASE_URL}?lat=${this.state.lat}&long=${this.state.long}&radius=${radius}&text=${searchTerm}&category=${categoryId}`).then(r => r.json())
+    .then(response => {
+        console.log(response)
+        this.setState({
+            events:response
+        })
+    })
+}
+
+
+//---state settting methods
+
+    
     setUserId= (userId) =>{
         this.setState({userId: userId})
     }
 
+    //clears current user and local storage
     handleLogOut = () =>{
         localStorage.clear()
         this.setState({
@@ -49,84 +168,25 @@ class MainDisplay extends React.Component {
         })
     }
 
-
-    fetchInitialEvents = (lat, long) => {
-        //returns a promise that holds the results of our API call to MEETUP
-        return fetch(`${BASE_URL}?lat=${lat}&long=${long}&radius=5`).then(r => r.json())
-        
-    }
-
-    fetchAllCategories = () => {
-        const allCategories={name: "All categories", sort_name: "All Categories", id: 0, shortname: "All"}
-        fetch(BASE_URL+"/categories")
-        .then(r => r.json())
-        .then(data => this.categories=[allCategories,...data.results])
-    }
-
-    fetchEventsByCategory = (categoryId) => {
-        //should I change state back to loading: true
-        fetch(`${BASE_URL}?lat=${this.state.lat}&long=${this.state.long}&category=${categoryId}`).then(r => r.json())
-        .then(response => {
-            this.setState({
-                events:response
-            })
-        })
-    }
-
-    handleUserEventSearch = (searchTerm, categoryId, radius) => {
-        console.log("searching with", searchTerm, "and category", categoryId)
-        fetch(`${BASE_URL}?lat=${this.state.lat}&long=${this.state.long}&radius=${radius}&text=${searchTerm}&category=${categoryId}`).then(r => r.json())
-        .then(response => {
-            console.log(response)
-            this.setState({
-                events:response
-            })
-        })
-    }
-
-    getUserLocationAndFetchEvents = () => {
-        navigator.geolocation.getCurrentPosition((pos) => {
-            this.fetchInitialEvents(pos.coords.latitude, pos.coords.longitude).then(response => {
-                this.setState({
-                events: response,
-                long: pos.coords.longitude,
-                lat: pos.coords.latitude,
-                loading: false
-                })
-            })
-        })
-    }
-
-
+    //sets selected Event based on map click
     selectEventForDisplay = (e, eventObj) => {
-
         this.setState({
             selectedEvent: eventObj
         })
     }
-
+    //removes selected Event
     closeDisplay = () => {
         this.setState({
             selectedEvent: null
         })
     }
 
+    //sets popup on hover over map point
     focusOnEvent = (eventObj) => {
         let newVal = this.state.popupEvent ? null : eventObj
         this.setState({
             popupEvent: newVal
         })
-    }
-    fetchCurrentUserObj = (userId) =>{
-        fetch(BASE_USER_URL + userId, {
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-                Authorization: `Token ${localStorage.getItem("token")}`
-              }
-        })
-        .then(r => r.json())
-        .then(userObj => this.setCurrentUser(userObj))
     }
 
     setCurrentUser= (userObj) =>{
@@ -135,7 +195,6 @@ class MainDisplay extends React.Component {
         })
     }
     
-
     showLoadingAnimation() {
         if (this.state.loading) {
             return (
@@ -145,6 +204,7 @@ class MainDisplay extends React.Component {
             )
         }
     }
+//--render helpers 
 
     renderMapIfReady() {
         return !this.state.loading ? <MapDoc 
@@ -155,11 +215,17 @@ class MainDisplay extends React.Component {
         popUpEvent={this.state.popupEvent}
         togglePopUpFocus={this.focusOnEvent}/> : null
     }
+
+
+//----Data formating methods
+
+    //manages Date Time for display and DB persistance (work around for large number issues with DB)
     convertTime(time) {
         let d = new Date(time)
         return d.toString()
     }
 
+    //takes data from Meetup Json structure and formats it for DB persistance
     parseEventForSave(eventObj){
         const description= !eventObj.description ? null : eventObj.description;
         const venue_name= !eventObj.venue.name ? null : eventObj.venue.name;
@@ -183,41 +249,6 @@ class MainDisplay extends React.Component {
     }   
 
 
-    removeEventFromUser = (eventObj) =>{
-        console.log (eventObj)
-        const userId = this.state.userId
-        const data ={ user: { userId: userId, event: eventObj, removeEvent: true} }
-        
-        fetch(`http://localhost:3001/users/${userId}`, {
-        method: "PATCH",
-        headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Token ${localStorage.getItem("token")}`
-          },
-        body: JSON.stringify(data)
-    })
-    .then(r => r.json())
-    .then(userObj => this.setCurrentUser(userObj))
-    }
-
-
-    saveEventToUser= (userId, event) => {
-        const data ={ user: { userId: userId, event: this.parseEventForSave(event), removeEvent: false} }
-        
-        fetch(`http://localhost:3001/users/${userId}`, {
-        method: "PATCH",
-        headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Token ${localStorage.getItem("token")}`
-          },
-        body: JSON.stringify(data)
-    })
-    .then(r => r.json())
-    .then(userObj => this.setCurrentUser(userObj)) //this updates the user object to update showpage elements
-
-    }
 
     render() {
         return (
@@ -253,9 +284,9 @@ class MainDisplay extends React.Component {
                 )} } 
                 /> 
                 <Route exact path="/my-events" render ={() =>{
-                    if(this.state.currentUser && localStorage.getItem('token')){
+                    if(localStorage.getItem('token')){
                     return(
-                    <UserShow currentUser ={this.state.currentUser} removeEventFromUser={this.removeEventFromUser}/> 
+                    <UserShow removeEventFromUser={this.removeEventFromUser}/> 
                 )}else{
                    return <h1>Please log in to view your events</h1>
                 }

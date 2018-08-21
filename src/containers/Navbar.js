@@ -24,8 +24,7 @@ export default class Navbar extends Component {
       {username: '', password: ''})
   }
 
-  //user signup
-
+  //user signup flag for conditionally showing signin form
   setSignUp=()=>{
     this.setState({
       signUp: !this.state.signUp
@@ -70,7 +69,21 @@ export default class Navbar extends Component {
         body: JSON.stringify({user:{username: username, password: password}})
     })
     .then(r  => r.json())
-    .then(json => json["success"] ? (localStorage.setItem("token", `${json['token']}`), this.props.setUserId(json['user_id']), this.props.fetchCurrentUser(json['user_id'])) : alert("Wrong username or password"))
+    .then(json => json["success"] ? this.setLogedIn(json) : alert("Wrong username or password"))
+}
+
+//this sets localStorage token and resets form fields
+setLogedIn =(json) =>{
+  localStorage.setItem("token", `${json['token']}`);
+  this.props.setUserId(json['user_id']);
+  this.props.fetchCurrentUser(json['user_id'])
+  this.setState({
+    username: '',
+    password: '',
+    firstName: '',
+    lastName: '', 
+    signUp: false
+  })
 }
 
 displayUserLogInForm =() =>{
@@ -88,9 +101,8 @@ displayUserLogInForm =() =>{
         
     </Form>
 
-    <Button onClick={this.setSignUp}>Create an account</Button>
-</React.Fragment>
-    
+      <Button onClick={this.setSignUp}>Create an account</Button>
+  </React.Fragment> 
   )
 }
 
