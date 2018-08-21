@@ -12,10 +12,10 @@ function convertTime(et) {
 const EventItem = ({eventItem, removeEventFromUser}) =>
 
 <Item>
-      <Item.Image size='tiny' src={eventItem.photo_url ? eventItem.photo_url : PLACEHOLDER_IMG} />
-      <Button onClick={() => removeEventFromUser(eventItem)}>Remove from your list</Button>
+      <Item.Image size='small' src={eventItem.photo_url ? eventItem.photo_url : PLACEHOLDER_IMG} />
+      
 
-      <Item.Content>
+      <Item.Content verticalAlign="middle">
         <Item.Header as='a'>{!eventItem.name ? null:eventItem.name}</Item.Header>
         <Item.Meta>Description</Item.Meta>
         <Item.Description>
@@ -25,6 +25,7 @@ const EventItem = ({eventItem, removeEventFromUser}) =>
         <Item.Extra>Duration: {!eventItem.duration ? null : convertTime(eventItem.duration)} </Item.Extra>
         <Item.Extra>Loctation {!eventItem.address ? null : eventItem.address}, {!eventItem.city ? null : eventItem.city} </Item.Extra>
         <a href={eventItem.event_url} target="_blank">View Meetup Page</a>
+        <Button secondary floated="right" onClick={() => removeEventFromUser(eventItem)}>Remove from your list</Button>
       </Item.Content>
 </Item>
 
