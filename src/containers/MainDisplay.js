@@ -9,7 +9,9 @@ import UserShow from './UserShow'
 import { Route } from 'react-router-dom'
 
 
-const BASE_URL="http://localhost:3001/search"
+// const BASE_URL="http://localhost:3001/search"
+const BASE_URL="https://serene-headland-62664.herokuapp.com/search"
+const BASE_USER_URL="https://serene-headland-62664.herokuapp.com/users/current-user"
 
 class MainDisplay extends React.Component {
     constructor() {
@@ -78,7 +80,7 @@ handleUserEventSearch = (searchTerm, categoryId) => {
 //called from EventDisplay to add event to user
 saveEventToUser= (event) => {
     const data ={ user: { event: this.parseEventForSave(event), removeEvent: false} }   
-    fetch(`http://localhost:3001/users/current-user`, {
+    fetch(BASE_USER_URL, {
     method: "PATCH",
     headers: {
         "Content-Type": "application/json",

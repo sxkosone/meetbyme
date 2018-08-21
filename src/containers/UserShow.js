@@ -1,7 +1,8 @@
 import React from 'react'
 import EventItem from '../components/EventItem';
 
-const BASE_USER_URL="http://localhost:3001/users/current-user"
+// const BASE_USER_URL="http://localhost:3001/users/current-user"
+const BASE_USER_URL="https://serene-headland-62664.herokuapp.com/users/current-user"
 
 class UserShow extends React.Component{
 

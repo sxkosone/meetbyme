@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { Menu, Form, Input, Button} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 
-const BASE_USER_URL="http://localhost:3001/users/current-user"
+// const BASE_USER_URL="http://localhost:3001/users/current-user"
+const BASE_USER_URL="https://serene-headland-62664.herokuapp.com/users/current-user"
+const BASE_URL="https://serene-headland-62664.herokuapp.com/users"
 
 
 export default class Navbar extends Component {
@@ -51,7 +53,7 @@ export default class Navbar extends Component {
 
   handleCreateUser = (e) =>{
     e.preventDefault()
-    return fetch(`http://localhost:3001/users`, {
+    return fetch(BASE_URL, {
       method: "POST",
       headers: {
           "Content-Type": "application/json; charset=utf-8",
@@ -65,7 +67,7 @@ export default class Navbar extends Component {
 
  
   userLogIn = (username, password)=>{
-    return fetch(`http://localhost:3001/users/login`, {
+    return fetch(`${BASE_URL}/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json; charset=utf-8",
