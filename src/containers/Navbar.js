@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Menu, Form, Input, Button} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 
+const BASE_USER_URL="http://localhost:3001/users/current-user"
+
 
 export default class Navbar extends Component {
   state = { 
@@ -10,11 +12,27 @@ export default class Navbar extends Component {
       password: '',
       firstName: '',
       lastName: '', 
-      signUp: false
+      signUp: false,
+      user: null
      
     }
 
+  componentDidMount(){
+      fetch(BASE_USER_URL, {
+          headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              Authorization: `Token ${localStorage.getItem("token")}`
+              }
+      })
+      .then(r => r.json())
+      .then(userObj => this.setState({user: userObj}))
+  
+  }
+
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+
+  
 
   handleLogin= () => {
     const username = this.state.username;
@@ -46,9 +64,10 @@ export default class Navbar extends Component {
   }
 
   setLogedIn =(json) =>{
+    console.log("setLoggedin:", json)
     localStorage.setItem("token", `${json['token']}`);
-    this.props.setUserId(json['user_id']);
-    this.props.fetchCurrentUser(json['user_id'])
+    this.props.setUserId(json['user']["id"]);
+    this.props.fetchCurrentUser(json['user']['id'])
     this.setState({
       username: '',
       password: '',
@@ -74,15 +93,25 @@ export default class Navbar extends Component {
 
 //this sets localStorage token and resets form fields
 setLogedIn =(json) =>{
+  console.log(json)
   localStorage.setItem("token", `${json['token']}`);
-  this.props.setUserId(json['user_id']);
-  this.props.fetchCurrentUser(json['user_id'])
+  //these methods save current logged in user to parent component MainDisplay
+  this.props.setUserId(json['user']["id"]);
+  this.props.fetchCurrentUser(json['user']["id"])
   this.setState({
     username: '',
     password: '',
     firstName: '',
     lastName: '', 
-    signUp: false
+    signUp: false,
+    user: json["user"]
+  })
+}
+
+handleLogOut = () => {
+  this.props.logOut()
+  this.setState({
+    user: null
   })
 }
 
@@ -137,31 +166,35 @@ displayCreateUserForm = () =>{
     return (
       <div>
         <Menu pointing secondary>
-          {/* <NavLink exact to="/">  */}
             <Menu.Item as={ Link } exact="true" to="/"
               name='Event Map' 
               active={activeItem === 'Event Map'} 
               onClick={this.handleItemClick} />
-          {/* </NavLink> */}
 
-            { this.props.currentUser ?   
+            { this.state.user ?   
+              <React.Fragment>
                   <Menu.Item as={ Link } exact="true" to="/my-events"
                     name='My Events'
                     active={activeItem === 'My Events'}
                     onClick={this.handleItemClick}
                   />
+                  <Menu.Item
+                  name={`Currently logged in as ${this.state.user.first_name}`}
+                  />
+              </React.Fragment>
                 :
               null
             }
           
           <Menu.Menu position='right'>
             
-            {this.props.currentUser ? 
+            {this.state.user ? 
                 <Menu.Item
                   name='logout'
                   active={activeItem === 'logout'}
-                  onClick={this.props.logOut}
+                  onClick={this.handleLogOut}
                 /> 
+                
               :  (this.state.signUp ?  this.displayCreateUserForm() : this.displayUserLogInForm())
             }
               
