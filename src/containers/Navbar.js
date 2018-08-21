@@ -84,11 +84,12 @@ displayUserLogInForm =() =>{
         <label>Password</label>
         <Input type="password" placeholder='password' value={this.state.password} onChange={(e) => this.setState({ password: e.target.value})}/>
         <Button onClick={this.handleLogin}>LogIn</Button>
+        <Button primary onClick={this.setSignUp}>Create an account</Button>
         </Form.Field>
         
     </Form>
 
-    <Button onClick={this.setSignUp}>Create an account</Button>
+    
 </React.Fragment>
     
   )
