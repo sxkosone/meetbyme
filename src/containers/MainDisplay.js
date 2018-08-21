@@ -10,7 +10,6 @@ import { Route } from 'react-router-dom'
 
 
 const BASE_URL="http://localhost:3001/search"
-const BASE_USER_URL="http://localhost:3001/users/"
 
 class MainDisplay extends React.Component {
     constructor() {
@@ -22,10 +21,7 @@ class MainDisplay extends React.Component {
             lat: null,
             selectedEvent: null,
             popupEvent: null,
-            loading: true,
-            userId: null,
-            currentUser: null
-            
+            loading: true,     
         }
         this.categories = []
     }
@@ -51,7 +47,7 @@ fetchAllCategories = () => {
     const allCategories={name: "All categories", sort_name: "All Categories", id: 0, shortname: "All"}
     fetch(BASE_URL+"/categories")
     .then(r => r.json())
-    .then(data => this.categories=[allCategories, data])//look at this later
+    .then(data => this.categories=[allCategories, ...data.results])//look at this later
 }
 
 fetchEventsByCategory = (categoryId) => {
@@ -64,12 +60,12 @@ fetchEventsByCategory = (categoryId) => {
     })
 }
 
+fetchInitialEvents = (lat, long) => {
+    //returns a promise that holds the results of our API call to MEETUP
+    return fetch(`${BASE_URL}?lat=${lat}&long=${long}&radius=5`).then(r => r.json())
+    
+}
 
-    fetchInitialEvents = (lat, long) => {
-        //returns a promise that holds the results of our API call to MEETUP
-        return fetch(`${BASE_URL}?lat=${lat}&long=${long}&radius=5`).then(r => r.json())
-        
-    }
 handleUserEventSearch = (searchTerm, categoryId) => {
     fetch(`${BASE_URL}?lat=${this.state.lat}&long=${this.state.long}&text=${searchTerm}&category=${categoryId}`).then(r => r.json())
     .then(response => {
@@ -79,43 +75,9 @@ handleUserEventSearch = (searchTerm, categoryId) => {
     })
 }
 
-
-fetchCurrentUserObj = (userId) =>{
-    fetch(BASE_USER_URL + userId, {
-        headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Token ${localStorage.getItem("token")}`
-          }
-    })
-    .then(r => r.json())
-    .then(userObj => this.setCurrentUser(userObj))
-}
-
-
-//moved to UserShow
-// removeEventFromUser = (eventObj) =>{
-//     console.log (eventObj)
-//     const userId = this.state.userId
-//     const data ={ user: { userId: userId, event: eventObj, removeEvent: true} }
-    
-//     fetch(`http://localhost:3001/users/${userId}`, {
-//     method: "PATCH",
-//     headers: {
-//         "Content-Type": "application/json",
-//         Accept: "application/json",
-//         Authorization: `Token ${localStorage.getItem("token")}`
-//       },
-//     body: JSON.stringify(data)
-// })
-// .then(r => r.json())
-// .then(userObj => this.setCurrentUser(userObj))
-// }
-
 //called from EventDisplay to add event to user
 saveEventToUser= (event) => {
-    const data ={ user: { event: this.parseEventForSave(event), removeEvent: false} }
-    
+    const data ={ user: { event: this.parseEventForSave(event), removeEvent: false} }   
     fetch(`http://localhost:3001/users/current-user`, {
     method: "PATCH",
     headers: {
@@ -124,10 +86,7 @@ saveEventToUser= (event) => {
         Authorization: `Token ${localStorage.getItem("token")}`
       },
     body: JSON.stringify(data)
-})
-.then(r => r.json())
-.then(userObj => this.setCurrentUser(userObj)) //this updates the user object to update showpage elements
-                //this may need to change as we may not need to set a userOBJ with token auth
+    })
 }
 
 //does not require user login but does require user to accept GEO location
@@ -160,18 +119,10 @@ handleUserEventSearch = (searchTerm, categoryId, radius) => {
 
 //---state settting methods
 
-    
-    setUserId= (userId) =>{
-        this.setState({userId: userId})
-    }
 
     //clears current user and local storage
     handleLogOut = () =>{
         localStorage.clear()
-        this.setState({
-            userId: null,
-            currentUser: null
-        })
     }
 
     //sets selected Event based on map click
@@ -195,11 +146,6 @@ handleUserEventSearch = (searchTerm, categoryId, radius) => {
         })
     }
 
-    setCurrentUser= (userObj) =>{
-        this.setState({
-            currentUser: userObj
-        })
-    }
     
     showLoadingAnimation() {
         if (this.state.loading) {
@@ -260,10 +206,7 @@ handleUserEventSearch = (searchTerm, categoryId, radius) => {
         return (
         <div>
             <Navbar 
-                setUserId={this.setUserId} 
                 logOut={this.handleLogOut} 
-                fetchCurrentUser={this.fetchCurrentUserObj}
-                currentUser={this.state.currentUser}
             />
             
             <Route exact path="/" render= {() => {
@@ -271,7 +214,6 @@ handleUserEventSearch = (searchTerm, categoryId, radius) => {
                     <React.Fragment>
                             <Search 
                                 categories={this.categories} 
-                                // searchByCategory={this.fetchEventsByCategory}
                                 handleUserEventSearch={this.handleUserEventSearch}/>
                             <div className="dataDisplayContainer">
                                 {this.showLoadingAnimation()}
@@ -279,8 +221,7 @@ handleUserEventSearch = (searchTerm, categoryId, radius) => {
                                     <EventDisplay 
                                         event={this.state.selectedEvent} 
                                         closeDisplay={this.closeDisplay}
-                                        userId= {this.state.userId ? this.state.userId : null}
-                                        saveEventToUser= {this.state.userId ? this.saveEventToUser : null}
+                                        saveEventToUser= {localStorage.getItem("token")? this.saveEventToUser : null}
                                     /> 
                                     : 
                                     null}

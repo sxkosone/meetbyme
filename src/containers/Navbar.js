@@ -63,22 +63,7 @@ export default class Navbar extends Component {
   .then(json => json["success"] ? this.setLogedIn(json) : alert("Username has already been taken"))
   }
 
-  setLogedIn =(json) =>{
-    console.log("setLoggedin:", json)
-    localStorage.setItem("token", `${json['token']}`);
-    this.props.setUserId(json['user']["id"]);
-    this.props.fetchCurrentUser(json['user']['id'])
-    this.setState({
-      username: '',
-      password: '',
-      firstName: '',
-      lastName: '', 
-      signUp: false
-    })
-  }
  
-
-
   userLogIn = (username, password)=>{
     return fetch(`http://localhost:3001/users/login`, {
         method: "POST",
@@ -94,11 +79,7 @@ export default class Navbar extends Component {
 
 //this sets localStorage token and resets form fields
 setLogedIn =(json) =>{
-  console.log(json)
   localStorage.setItem("token", `${json['token']}`);
-  //these methods save current logged in user to parent component MainDisplay
-  this.props.setUserId(json['user']["id"]);
-  this.props.fetchCurrentUser(json['user']["id"])
   this.setState({
     username: '',
     password: '',
@@ -172,7 +153,7 @@ displayCreateUserForm = () =>{
               active={activeItem === 'Event Map'} 
               onClick={this.handleItemClick} />
 
-            { this.state.user ?   
+            { this.state.user && !this.state.user.message ?   
               <React.Fragment>
                   <Menu.Item as={ Link } exact="true" to="/my-events"
                     name='My Events'
@@ -189,8 +170,11 @@ displayCreateUserForm = () =>{
           
           <Menu.Menu position='right'>
             
-            {this.state.user ? 
+            {this.state.user && !this.state.user.message ? 
                 <Menu.Item
+                  as={ Link }
+                  exact="true"
+                  to="/"
                   name='logout'
                   active={activeItem === 'logout'}
                   onClick={this.handleLogOut}
