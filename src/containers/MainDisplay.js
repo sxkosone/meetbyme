@@ -6,7 +6,7 @@ import '../index.css'
 import { Dimmer, Loader } from 'semantic-ui-react'
 import Navbar from './Navbar'
 import UserShow from './UserShow'
-import { Route, Link, Switch} from 'react-router-dom'
+import { Route } from 'react-router-dom'
 
 
 const BASE_URL="http://localhost:3001/search"
@@ -134,6 +134,19 @@ getUserLocationAndFetchEvents = () => {
     })
 }
 
+
+handleUserEventSearch = (searchTerm, categoryId, radius) => {
+    console.log("searching with", searchTerm, "and category", categoryId)
+    fetch(`${BASE_URL}?lat=${this.state.lat}&long=${this.state.long}&radius=${radius}&text=${searchTerm}&category=${categoryId}`).then(r => r.json())
+    .then(response => {
+        console.log(response)
+        this.setState({
+            events:response
+        })
+    })
+}
+
+
 //---state settting methods
 
     
@@ -229,10 +242,6 @@ getUserLocationAndFetchEvents = () => {
         duration: duration, time: time, group_name: group_name, group_who: group_who,
         meetup_id: meetup_id, photo_url: photo_url}
     }   
-
-
-  
-
 
 
 
