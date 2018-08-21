@@ -45,6 +45,9 @@ export default class Navbar extends Component {
   .then(json => json["success"] ? this.setLogedIn(json) : alert("Username has already been taken"))
   }
 
+ 
+
+
   userLogIn = (username, password)=>{
     return fetch(`http://localhost:3001/users/login`, {
         method: "POST",
@@ -75,17 +78,17 @@ setLogedIn =(json) =>{
 displayUserLogInForm =() =>{
   return (
     <React.Fragment>
-      <Form>
-          <Form.Field inline>
-          <label>UserName</label>
-          <Input placeholder='username' value={this.state.username} onChange={(e) => this.setState({ username: e.target.value})}/>
-          </Form.Field>
-          <Form.Field inline>
-          <label>Password</label>
-          <Input type="password" placeholder='password' value={this.state.password} onChange={(e) => this.setState({ password: e.target.value})}/>
-          </Form.Field>
-          <Button onClick={this.handleLogin}>LogIn</Button>
-      </Form>
+    <Form>
+        <Form.Field inline>
+        <label>UserName</label>
+        <Input placeholder='username' value={this.state.username} onChange={(e) => this.setState({ username: e.target.value})}/>
+        
+        <label>Password</label>
+        <Input type="password" placeholder='password' value={this.state.password} onChange={(e) => this.setState({ password: e.target.value})}/>
+        <Button onClick={this.handleLogin}>LogIn</Button>
+        </Form.Field>
+        
+    </Form>
 
       <Button onClick={this.setSignUp}>Create an account</Button>
   </React.Fragment> 
@@ -136,16 +139,12 @@ displayCreateUserForm = () =>{
                     active={activeItem === 'My Events'}
                     onClick={this.handleItemClick}
                   />
-                
                 :
-
               null
             }
           
           <Menu.Menu position='right'>
             
-          
-
             {this.props.currentUser ? 
                 <Menu.Item
                   name='logout'

@@ -43,7 +43,8 @@ componentDidMount() {
 
 fetchInitialEvents = (lat, long) => {
     //returns a promise that holds the results of our API call to MEETUP
-    return fetch(`${BASE_URL}?lat=${lat}&long=${long}`).then(r => r.json())   
+    return fetch(`${BASE_URL}?lat=${lat}&long=${long}&radius=5`).then(r => r.json())
+    
 }
 
 fetchAllCategories = () => {
@@ -72,6 +73,7 @@ handleUserEventSearch = (searchTerm, categoryId) => {
         })
     })
 }
+
 
 fetchCurrentUserObj = (userId) =>{
     fetch(BASE_USER_URL + userId, {
