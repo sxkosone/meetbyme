@@ -18,7 +18,7 @@ class MapDoc extends React.PureComponent {
             focus: null    
         }
         this.CENTER = [this.props.long, this.props.lat]
-        this.ZOOM = [16]  //starting zoom level 0=far away, 20= very close
+        this.ZOOM = [12]  //starting zoom level 0=far away, 20= very close
     }
    
 
@@ -56,7 +56,7 @@ class MapDoc extends React.PureComponent {
                 style={`${style}`}
                     //this is the size properties for map object
                 containerStyle={{ 
-                    height: "50vh", 
+                    height: "100vh", 
                     width: "100vw"
                 }}
                 center={this.CENTER}
