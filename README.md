@@ -1,3 +1,10 @@
+## README
+
+Mapping application to show meetup events near you. Live demo version here: live version here: http://meet-by-me.herokuapp.com/
+
+Backend repo here: https://github.com/sxkosone/fpn-backend
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 1. `git clone` this repo and `npm install`.
