@@ -14,7 +14,7 @@ const EventDisplay = ({event, closeDisplay, saveEventToUser}) => {
     }
     
     return (
-            <Container className="event-container">
+            <Container className="event-container ">
                 <Button secondary onClick={closeDisplay}>Close</Button>
                 {localStorage.getItem("token") ? <Popup trigger={<Button color="green" onClick={() => saveEventToUser(event)} >Save Event</Button>} content="Saved!" on="click"/> : null}
                 <h2>{event.name}</h2>

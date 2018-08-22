@@ -211,7 +211,8 @@ handleUserEventSearch = (searchTerm, categoryId, radius) => {
         return (
         <div>
             <Navbar 
-                logOut={this.handleLogOut} 
+                logOut={this.handleLogOut}
+                
             />
             
             <Route exact path="/" render= {() => {
