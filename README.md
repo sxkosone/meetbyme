@@ -1,6 +1,6 @@
 ## README
 
-Mapping application to show meetup events near you. Live demo version here: live version here: http://meet-by-me.herokuapp.com/
+Mapping application to show meetup events near you. Live demo version here: http://meet-by-me.herokuapp.com/
 
 Backend repo here: https://github.com/sxkosone/fpn-backend
 
