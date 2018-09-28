@@ -23,7 +23,8 @@ class MainDisplay extends React.Component {
             lat: null,
             selectedEvent: null,
             popupEvent: null,
-            loading: true,     
+            loading: true,   
+            error: null  
         }
         this.categories = []
     }
@@ -96,12 +97,20 @@ getUserLocationAndFetchEvents = () => {
     navigator.geolocation.getCurrentPosition((pos) => {
         this.fetchInitialEvents(pos.coords.latitude, pos.coords.longitude)
         .then(response => {
+            
             this.setState({
             events: response,
             long: pos.coords.longitude,
             lat: pos.coords.latitude,
             loading: false
             })
+        }).catch(e => {
+            console.log("got this error:",e)
+            
+            this.setState({
+                error: e.toString()
+            })
+            
         })
     })
 }
@@ -152,7 +161,7 @@ handleUserEventSearch = (searchTerm, categoryId, radius) => {
     showLoadingAnimation() {
         if (this.state.loading) {
             return (
-                <Dimmer active>
+                <Dimmer inverted active>
                     <Loader />
                 </Dimmer>
             )
@@ -161,7 +170,8 @@ handleUserEventSearch = (searchTerm, categoryId, radius) => {
 //--render helpers 
 
     renderMapIfReady() {
-        return !this.state.loading ? <MapDoc 
+        
+        return !this.state.loading && this.state.error === null ? <MapDoc 
         long={this.state.long} 
         lat={this.state.lat} 
         events={this.state.events.results} 

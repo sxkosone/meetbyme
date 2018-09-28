@@ -47,10 +47,12 @@ class MapDoc extends React.PureComponent {
     }
 
     render() {
+        
         return( 
         <div>
             {(this.props.events === undefined || this.props.events.length=== 0) ? <h2>No events found with those search terms!</h2> : null}
         { (this.props.long) ? 
+        
              <Map
              //this is where you set the initial style properties of the map. Style is built on MapBox
                 style={`${style}`}
