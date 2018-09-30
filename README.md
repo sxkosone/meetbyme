@@ -6,6 +6,9 @@ Mapping application to show Meetup events near you. Users can search, filter and
 
 [Backend repo here](https://github.com/sxkosone/fpn-backend)
 
+### Demo video
+![Video demonstration of meet-by-me](public/meet-by-me-video-small.mov)
+
 ### Installation instructions
 1. `git clone` this repo and `npm install`.
 2. The frontend makes API requests to Mapbox. Get your Mapbox API key by signing up to Mapbox
@@ -13,7 +16,7 @@ Mapping application to show Meetup events near you. Users can search, filter and
 4. You can reference the key in your code with `process.env.REACT_APP_MAPBOX_API`
 
 ### Browser troubleshooting
-- If you get an "Error: Failed to initialize WebGL." on Google Chrome, you need to change your browser settings. Go to `chrome://flags` on the omnibar and enable WebGL Draft Extensions and Override Software Rendering List. You'll be required to restart the browser after this
+- There is a [bug](https://github.com/mapbox/mapbox-gl-js/issues/4679) on some newer versions of Chrome that may cause the map to crash. that If you get an "Error: Failed to initialize WebGL." on Google Chrome, you need to change your browser settings. Go to `chrome://flags` on the omnibar and enable WebGL Draft Extensions and Override Software Rendering List. 
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
