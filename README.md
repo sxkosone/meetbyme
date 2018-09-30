@@ -7,7 +7,7 @@ Mapping application to show Meetup events near you. Users can search, filter and
 [Backend repo here](https://github.com/sxkosone/fpn-backend)
 
 ### Demo video
-![Video demonstration of meet-by-me](public/meet-by-me-video-small.mov)
+![Video demonstration of meet-by-me](public/meetbyme-demo2.mp4)
 
 ### Installation instructions
 1. `git clone` this repo and `npm install`.
