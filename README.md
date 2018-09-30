@@ -1,9 +1,22 @@
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+## Meet by Me
 
+Mapping application to show Meetup events near you. Users can search, filter and save events. Frontend uses Mapbox API and React, Rails backend fetches the event information from Meetup API. Project by Susanna Kosonen & [Will Ley](https://github.com/wley3337)
+
+[Live demo version here](https://meet-by-me.herokuapp.com/)
+
+[Backend repo here](https://github.com/sxkosone/fpn-backend)
+
+### Installation instructions
 1. `git clone` this repo and `npm install`.
-2. Get your Mapbox API key by signing up to Mapbox
+2. The frontend makes API requests to Mapbox. Get your Mapbox API key by signing up to Mapbox
 3. Create a `.env` file outside our `src` folder and add the following line: `REACT_APP_MAPBOX_API="your-key-here"`
 4. You can reference the key in your code with `process.env.REACT_APP_MAPBOX_API`
+
+### Browser troubleshooting
+- If you get an "Error: Failed to initialize WebGL." on Google Chrome, you need to change your browser settings. Go to `chrome://flags` on the omnibar and enable WebGL Draft Extensions and Override Software Rendering List. You'll be required to restart the browser after this
+
+
+This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
 You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
