@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactMapboxGl, { Layer, Feature, Popup} from "react-mapbox-gl";
+import mapboxgl from "mapbox-gl";
 
 // const style = "mapbox://styles/wley3337/cjkx3cn5s1cm12sqs586zo4kr"
 const style = "mapbox://styles/mapbox/light-v9"
@@ -50,8 +51,10 @@ class MapDoc extends React.PureComponent {
         
         return( 
         <div>
-            {(this.props.events === undefined || this.props.events.length=== 0) ? <h2>No events found with those search terms!</h2> : null}
-        { (this.props.long) ? 
+        {(this.props.events === undefined || this.props.events.length=== 0) ? <h2>No events found with those search terms!</h2> : null}
+        {/* check if browser supports maps, render map only if yes & display possible error message */}
+        {mapboxgl.supported() ? null : <h2>Sorry, your browser doesn't support Mapbox!</h2>}
+        { (this.props.long) && mapboxgl.supported() ? 
         
              <Map
              //this is where you set the initial style properties of the map. Style is built on MapBox
@@ -90,7 +93,7 @@ class MapDoc extends React.PureComponent {
                         <h3>{this.state.focus.name}</h3>
                     </Popup>
                     :
-                    null
+                    <p>Mapbox maps are not supported in your browser</p>
             
                 }
                 

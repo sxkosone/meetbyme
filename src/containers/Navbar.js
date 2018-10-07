@@ -3,6 +3,8 @@ import { Menu, Form, Input, Button} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 
 // const BASE_USER_URL="http://localhost:3001/users/current-user"
+// const BASE_URL="http://localhost:3001/users"
+
 const BASE_USER_URL="https://serene-headland-62664.herokuapp.com/users/current-user"
 const BASE_URL="https://serene-headland-62664.herokuapp.com/users"
 

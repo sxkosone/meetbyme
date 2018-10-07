@@ -10,6 +10,7 @@ import { Route } from 'react-router-dom'
 
 
 // const BASE_URL="http://localhost:3001/search"
+// const BASE_USER_URL="http://localhost:3001/users/current-user"
 const BASE_URL="https://serene-headland-62664.herokuapp.com/search"
 const BASE_USER_URL="https://serene-headland-62664.herokuapp.com/users/current-user"
 
